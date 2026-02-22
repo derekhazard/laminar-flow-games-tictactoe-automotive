@@ -44,14 +44,14 @@ jobs:
 
       - name: Upload lint report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: lint-report
           path: app/build/reports/lint-results-debug.html
 
       - name: Upload detekt report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: detekt-report
           path: app/build/reports/detekt/detekt.html
