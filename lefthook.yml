@@ -1,0 +1,11 @@
+pre-commit:
+  commands:
+    ktlint:
+      run: ./gradlew ktlintCheck
+    detekt:
+      run: ./gradlew detekt
+
+pre-push:
+  commands:
+    lint:
+      run: ./gradlew lintDebug

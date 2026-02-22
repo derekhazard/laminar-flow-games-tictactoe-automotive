@@ -1,0 +1,39 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+complexity:
+  LongMethod:
+    threshold: 60
+  LongParameterList:
+    functionThreshold: 6
+    constructorThreshold: 7
+  TooManyFunctions:
+    thresholdInFiles: 20
+    thresholdInClasses: 15
+
+naming:
+  FunctionNaming:
+    functionPattern: '[a-z][a-zA-Z0-9]*'
+  VariableNaming:
+    variablePattern: '[a-z][A-Za-z0-9]*'
+
+style:
+  MagicNumber:
+    # Allow common game constants without requiring named constants
+    ignoreNumbers: ['-1', '0', '1', '2', '3', '8', '9']
+    ignoreHashCodeFunction: true
+    ignorePropertyDeclaration: true
+    ignoreConstantDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreNamedArgument: true
+    ignoreEnums: true
+  WildcardImport:
+    active: true
+  MaxLineLength:
+    # Aligned with .editorconfig setting
+    maxLineLength: 120
