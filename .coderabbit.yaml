@@ -51,7 +51,7 @@ reviews:
         required=true, activity flags are appropriate for automotive, no
         permissions or features that would fail Play Store for Automotive review.
 
-    - path: "app/src/main/res/layout/**/*.xml"
+    - path: "app/src/main/res/layout*/**/*.xml"
       instructions: |
         Layout targets AAOS automotive_1024p_landscape (1024x600dp), landscape
         only. Review for: interactive touch targets >= 72dp, no small or
