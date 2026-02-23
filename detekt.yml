@@ -8,12 +8,15 @@ config:
 comments:
   UndocumentedPublicClass:
     active: true
+    excludes: ['**/test/**', '**/androidTest/**']
   UndocumentedPublicFunction:
     active: true
+    excludes: ['**/test/**', '**/androidTest/**']
 
 complexity:
   LongMethod:
     threshold: 60
+    excludes: ['**/test/**', '**/androidTest/**']
   LongParameterList:
     functionThreshold: 6
     constructorThreshold: 7
@@ -24,6 +27,7 @@ complexity:
 naming:
   FunctionNaming:
     functionPattern: '[a-z][a-zA-Z0-9]*'
+    excludes: ['**/test/**', '**/androidTest/**']
   VariableNaming:
     variablePattern: '[a-z][A-Za-z0-9]*'
 
@@ -38,6 +42,7 @@ style:
     ignoreAnnotation: true
     ignoreNamedArgument: true
     ignoreEnums: true
+    excludes: ['**/test/**', '**/androidTest/**']
   WildcardImport:
     active: true
   MaxLineLength:

@@ -52,6 +52,17 @@ reviews:
         context, decision, consequences. Flag ADRs missing any of these sections
         or with a status of Proposed that has not been actioned.
 
+    - path: "app/src/test/**/*.kt"
+      instructions: |
+        Unit tests for pure Kotlin game logic (no Android dependencies).
+        Uses JUnit 4 and MockK. Review for: coverage of edge cases (win, draw,
+        invalid moves), descriptive test names (backtick function names are
+        idiomatic Kotlin test style), no @Ignore without an explanation comment,
+        no assertions without a failure message in ambiguous cases.
+        JaCoCo enforces 80% instruction coverage on game/** — flag tests that
+        appear to inflate coverage without testing real behaviour (e.g., tests
+        with no assertions, tests that only call constructors).
+
     - path: "app/src/main/AndroidManifest.xml"
       instructions: |
         This app targets Android Automotive OS for the Play Store for Automotive.
@@ -75,8 +86,9 @@ reviews:
     - path: ".github/workflows/**/*.yml"
       instructions: |
         CI pipeline: ktlintCheck → detekt → lintDebug → testDebugUnitTest →
-        assembleDebug. Flag any steps that are redundant with the Lefthook
-        pre-commit/pre-push hooks, or any missing coverage gaps.
+        jacocoGameCoverageVerification → assembleDebug. Flag any steps that
+        are redundant with the Lefthook pre-commit/pre-push hooks, or any
+        missing coverage gaps.
 
 chat:
   auto_reply: true

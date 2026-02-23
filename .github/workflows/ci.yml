@@ -39,6 +39,9 @@ jobs:
       - name: Unit tests
         run: ./gradlew testDebugUnitTest
 
+      - name: Coverage verification
+        run: ./gradlew jacocoGameCoverageVerification
+
       - name: Assemble debug
         run: ./gradlew assembleDebug
 
