@@ -9,6 +9,15 @@ reviews:
   review_status: true
   collapse_walkthrough: false
 
+  pre_merge_checks:
+    docstrings:
+      # Disabled: detekt UndocumentedPublicClass/UndocumentedPublicFunction
+      # enforces KDoc on all production code. Test functions use descriptive
+      # backtick names (idiomatic Kotlin) which this check cannot recognise,
+      # causing false failures. Documentation quality is enforced by detekt
+      # and CodeRabbit path_instructions instead.
+      mode: "off"
+
   auto_review:
     enabled: true
     drafts: false
