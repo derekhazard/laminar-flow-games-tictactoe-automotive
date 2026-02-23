@@ -37,7 +37,11 @@ jobs:
         run: ./gradlew lintDebug
 
       - name: Unit tests
-        run: ./gradlew testDebugUnitTest createDebugUnitTestCoverageReport
+        run: |
+          TEST_EXIT_CODE=0
+          ./gradlew testDebugUnitTest || TEST_EXIT_CODE=$?
+          ./gradlew createDebugUnitTestCoverageReport || true
+          exit $TEST_EXIT_CODE
 
       - name: Coverage verification
         run: ./gradlew jacocoGameCoverageVerification
