@@ -42,6 +42,15 @@ reviews:
         CarUxRestrictions compliance (all game interactions must be gated when
         the vehicle is not in park), proper resource cleanup, and idiomatic
         Kotlin. Flag deprecated API usage.
+        Documentation: all public classes and functions must have KDoc. Flag
+        missing KDoc on public APIs. Reject trivial comments that restate the
+        code (e.g., "// increment counter" above counter++).
+
+    - path: "docs/decisions/**/*.md"
+      instructions: |
+        ADR format: title, date, status (Proposed/Accepted/Deprecated/Superseded),
+        context, decision, consequences. Flag ADRs missing any of these sections
+        or with a status of Proposed that has not been actioned.
 
     - path: "app/src/main/AndroidManifest.xml"
       instructions: |
@@ -59,7 +68,7 @@ reviews:
 
     - path: "**/*.gradle.kts"
       instructions: |
-        AGP 9.0.1 with Gradle 9.1.0. Flag deprecated configurations or APIs.
+        AGP 9.0.1 with Gradle 9.3.1. Flag deprecated configurations or APIs.
         Note: AGP 9.x emits a "incompatible with Gradle 10" deprecation warning
         that is expected and non-blocking — do not flag this.
 
