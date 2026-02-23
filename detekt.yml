@@ -5,6 +5,12 @@ config:
   validation: true
   warningsAsErrors: false
 
+comments:
+  UndocumentedPublicClass:
+    active: true
+  UndocumentedPublicFunction:
+    active: true
+
 complexity:
   LongMethod:
     threshold: 60
