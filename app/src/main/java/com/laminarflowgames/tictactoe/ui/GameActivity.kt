@@ -35,6 +35,7 @@ class GameActivity : AppCompatActivity() {
     private val board = GameBoard()
     private var currentPlayer = Player.X
     private var gameOver = false
+    @Volatile
     private var isDrivingRestricted = false
 
     // ── Views ─────────────────────────────────────────────────────────────────
@@ -64,9 +65,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         uxRestrictionsManager?.unregisterListener()
         car?.disconnect()
+        super.onDestroy()
     }
 
     // ── Board wiring ──────────────────────────────────────────────────────────

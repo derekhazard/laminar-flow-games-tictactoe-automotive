@@ -33,7 +33,7 @@ driving state changes and gate cell clicks accordingly.
 `android.car` is a system API not present in the standard Android SDK. The jar
 is distributed as an optional platform library at:
 
-```
+```text
 ${android.sdkDirectory}/platforms/android-34/optional/android.car.jar
 ```
 

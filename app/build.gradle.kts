@@ -73,14 +73,24 @@ tasks.register<JacocoCoverageVerification>("jacocoGameCoverageVerification") {
 }
 
 val sdkDir: String =
-    rootProject.file("local.properties")
-        .takeIf { it.exists() }
-        ?.readLines()
-        ?.firstOrNull { it.startsWith("sdk.dir=") }
-        ?.removePrefix("sdk.dir=")
-        ?: System.getenv("ANDROID_HOME")
-        ?: System.getenv("ANDROID_SDK_ROOT")
-        ?: ""
+    (
+        rootProject.file("local.properties")
+            .takeIf { it.exists() }
+            ?.readLines()
+            ?.firstOrNull { it.startsWith("sdk.dir=") }
+            ?.removePrefix("sdk.dir=")
+            ?: System.getenv("ANDROID_HOME")
+            ?: System.getenv("ANDROID_SDK_ROOT")
+            ?: ""
+    ).also { resolved ->
+        if (resolved.isBlank()) {
+            logger.warn(
+                "android.car.jar: SDK directory not found. " +
+                    "Set sdk.dir in local.properties or ANDROID_HOME/ANDROID_SDK_ROOT. " +
+                    "android.car.* imports will fail to compile.",
+            )
+        }
+    }
 
 dependencies {
     compileOnly(files("$sdkDir/platforms/android-34/optional/android.car.jar"))
