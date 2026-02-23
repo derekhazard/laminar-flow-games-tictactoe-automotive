@@ -39,8 +39,8 @@ object GameRules {
     /**
      * Returns true when the board is full and no player has won.
      *
-     * A draw can only occur once [GameBoard.isFull] is true, so this is an O(1)
-     * check after [checkWinner] returns null.
+     * Internally calls both [GameBoard.isFull] and [checkWinner]; callers do not
+     * need to pre-check for a winner before calling this function.
      */
     fun isDraw(board: GameBoard): Boolean = board.isFull() && checkWinner(board) == null
 

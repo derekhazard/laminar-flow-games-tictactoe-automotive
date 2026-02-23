@@ -144,4 +144,9 @@ class GameRulesTest {
         board.makeMove(0, 0, Player.X)
         assertTrue(GameRules.isValidMove(board, 1, 1))
     }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `isValidMove throws on out-of-bounds coordinates`() {
+        GameRules.isValidMove(board, 3, 0)
+    }
 }

@@ -60,10 +60,21 @@ class GameBoardTest {
     fun `isFull returns true when all nine cells are occupied`() {
         for (row in 0..2) {
             for (col in 0..2) {
-                board.makeMove(row, col, Player.X)
+                val player = if ((row * 3 + col) % 2 == 0) Player.X else Player.O
+                board.makeMove(row, col, player)
             }
         }
         assertTrue(board.isFull())
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `cellAt throws on out-of-bounds coordinates`() {
+        board.cellAt(3, 0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `makeMove throws on out-of-bounds coordinates`() {
+        board.makeMove(0, 3, Player.X)
     }
 
     @Test
