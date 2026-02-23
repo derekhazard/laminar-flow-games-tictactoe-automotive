@@ -2,4 +2,9 @@
     <string name="app_name">Laminar Flow Games Tictactoe</string>
     <string name="btn_new_game">New Game</string>
     <string name="cell_empty_description">Empty cell</string>
+    <string name="status_turn">Player %s\'s turn</string>
+    <string name="status_winner">Player %s wins!</string>
+    <string name="status_draw">It\'s a draw!</string>
+    <string name="cell_desc_empty">Row %1$d, Column %2$d, empty</string>
+    <string name="cell_desc_occupied">Row %1$d, Column %2$d, %3$s</string>
 </resources>
