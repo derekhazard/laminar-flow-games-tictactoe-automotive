@@ -157,13 +157,13 @@ internal class MinimaxTest {
     @Test
     fun `cpu never loses when human plays center`() {
         simulateFullGame(humanFirstMove = 1 to 1)
-        assertNull("Minimax vs minimax on a 3×3 board must always draw — center opening", GameRules.checkWinner(board))
+        assertNull("minimax vs minimax must draw: center opening", GameRules.checkWinner(board))
     }
 
     /**
      * Simulates a game where X plays a fixed [humanFirstMove] as the opening, then
      * both sides use [Minimax.bestMove] for all remaining moves.
-     * We then verify X did not win.
+     * The caller verifies that the game ends in a draw (no winner).
      */
     private fun simulateFullGame(humanFirstMove: Pair<Int, Int>) {
         board = GameBoard()
