@@ -3,7 +3,7 @@ package com.laminarflowgames.tictactoe.game
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class PlayerTest {
+internal class PlayerTest {
 
     @Test
     fun `X opponent is O`() {

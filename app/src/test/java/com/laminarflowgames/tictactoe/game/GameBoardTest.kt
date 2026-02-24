@@ -7,7 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class GameBoardTest {
+internal class GameBoardTest {
 
     private lateinit var board: GameBoard
 
