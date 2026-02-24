@@ -101,7 +101,7 @@ internal class GameBoardTest {
     fun `clearCell makes an occupied cell empty`() {
         board.makeMove(1, 2, Player.X)
         board.clearCell(1, 2)
-        assertNull(board.cellAt(1, 2))
+        assertNull("cell (1,2) should be null after clearCell", board.cellAt(1, 2))
     }
 
     @Test(expected = IllegalArgumentException::class)

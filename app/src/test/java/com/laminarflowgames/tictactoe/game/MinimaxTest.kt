@@ -1,7 +1,6 @@
 package com.laminarflowgames.tictactoe.game
 
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -88,19 +87,32 @@ internal class MinimaxTest {
         assertEquals(0, col)
     }
 
+    @Test
+    fun `blocks human win in diagonal`() {
+        // X _ _
+        // _ X _   — X threatens main diagonal at (2,2)
+        // O _ _
+        board.makeMove(0, 0, Player.X)
+        board.makeMove(1, 1, Player.X)
+        board.makeMove(2, 0, Player.O)
+        val (row, col) = Minimax.bestMove(board, Player.O)
+        assertEquals(2, row)
+        assertEquals(2, col)
+    }
+
     // ── Win vs block preference ───────────────────────────────────────────────
 
     @Test
     fun `prefers winning over blocking`() {
-        // O O _
-        // X X _
-        // _ _ _   — O can win at (0,2); X threatens at (1,2) but winning takes priority
-        board.makeMove(0, 0, Player.O)
-        board.makeMove(0, 1, Player.O)
-        board.makeMove(1, 0, Player.X)
-        board.makeMove(1, 1, Player.X)
+        // _ X X   — X threatens row 0 at (0,0)
+        // O O _   — O wins at (1,2); winning takes priority over blocking (0,0)
+        // _ _ _
+        board.makeMove(0, 1, Player.X)
+        board.makeMove(0, 2, Player.X)
+        board.makeMove(1, 0, Player.O)
+        board.makeMove(1, 1, Player.O)
         val (row, col) = Minimax.bestMove(board, Player.O)
-        assertEquals(0, row)
+        assertEquals(1, row)
         assertEquals(2, col)
     }
 
@@ -133,19 +145,19 @@ internal class MinimaxTest {
     @Test
     fun `cpu never loses when human plays top-left corner`() {
         simulateFullGame(humanFirstMove = 0 to 0)
-        assertNotEquals("CPU should not lose when human opens at top-left", Player.X, GameRules.checkWinner(board))
+        assertNull("minimax vs minimax must draw: top-left opening", GameRules.checkWinner(board))
     }
 
     @Test
     fun `cpu never loses when human plays top-right corner`() {
         simulateFullGame(humanFirstMove = 0 to 2)
-        assertNotEquals("CPU should not lose when human opens at top-right", Player.X, GameRules.checkWinner(board))
+        assertNull("minimax vs minimax must draw: top-right opening", GameRules.checkWinner(board))
     }
 
     @Test
     fun `cpu never loses when human plays center`() {
         simulateFullGame(humanFirstMove = 1 to 1)
-        assertNotEquals("CPU should not lose when human opens at center", Player.X, GameRules.checkWinner(board))
+        assertNull("Minimax vs minimax on a 3×3 board must always draw — center opening", GameRules.checkWinner(board))
     }
 
     /**
