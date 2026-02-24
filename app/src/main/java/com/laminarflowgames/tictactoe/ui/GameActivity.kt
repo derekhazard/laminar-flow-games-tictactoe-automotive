@@ -4,6 +4,8 @@ import android.car.Car
 import android.car.drivingstate.CarUxRestrictions
 import android.car.drivingstate.CarUxRestrictionsManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +37,7 @@ class GameActivity : AppCompatActivity() {
     private val board = GameBoard()
     private var currentPlayer = Player.X
     private var gameOver = false
+
     @Volatile
     private var isDrivingRestricted = false
 
@@ -51,9 +54,27 @@ class GameActivity : AppCompatActivity() {
         isDrivingRestricted = restrictions.isRequiresDistractionOptimization
         runOnUiThread { updateBoardEnabled() }
     }
+    private val carLifecycleListener = Car.CarServiceLifecycleListener { connectedCar, ready ->
+        if (ready) {
+            uxRestrictionsManager =
+                connectedCar.getCarManager(Car.CAR_UX_RESTRICTION_SERVICE) as? CarUxRestrictionsManager
+            uxRestrictionsManager?.registerListener(uxListener)
+            uxRestrictionsManager?.currentCarUxRestrictions?.let { restrictions ->
+                isDrivingRestricted = restrictions.isRequiresDistractionOptimization
+                updateBoardEnabled()
+            }
+        } else {
+            uxRestrictionsManager?.unregisterListener()
+            uxRestrictionsManager = null
+        }
+    }
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
+    /**
+     * Inflates the layout, wires board cells and the New Game button, starts
+     * [CarUxRestrictionsManager] monitoring, and sets the initial turn status.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -64,6 +85,10 @@ class GameActivity : AppCompatActivity() {
         updateStatus()
     }
 
+    /**
+     * Releases Car API resources before the activity is destroyed: unregisters the
+     * UX restrictions listener and disconnects the [Car] instance.
+     */
     override fun onDestroy() {
         uxRestrictionsManager?.unregisterListener()
         car?.disconnect()
@@ -92,6 +117,7 @@ class GameActivity : AppCompatActivity() {
         if (!GameRules.isValidMove(board, row, col)) return
         board.makeMove(row, col, currentPlayer)
         updateCell(row, col)
+        updateBoardEnabled()
         val winner = GameRules.checkWinner(board)
         when {
             winner != null -> {
@@ -154,17 +180,15 @@ class GameActivity : AppCompatActivity() {
 
     // ── CarUxRestrictions ─────────────────────────────────────────────────────
 
-    @Suppress("DEPRECATION", "TooGenericExceptionCaught", "SwallowedException")
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
     private fun initCarUxRestrictions() {
         try {
-            car = Car.createCar(this)
-            uxRestrictionsManager =
-                car?.getCarManager(Car.CAR_UX_RESTRICTION_SERVICE) as? CarUxRestrictionsManager
-            uxRestrictionsManager?.registerListener(uxListener)
-            uxRestrictionsManager?.currentCarUxRestrictions?.let { restrictions ->
-                isDrivingRestricted = restrictions.isRequiresDistractionOptimization
-                updateBoardEnabled()
-            }
+            car = Car.createCar(
+                this,
+                Handler(Looper.getMainLooper()),
+                Car.CAR_WAIT_TIMEOUT_DO_NOT_WAIT,
+                carLifecycleListener,
+            )
         } catch (e: Exception) {
             // Non-automotive environments (e.g. standard Android or JVM tests) do not
             // provide the Car service. Fail gracefully: leave isDrivingRestricted = false

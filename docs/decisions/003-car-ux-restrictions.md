@@ -28,18 +28,13 @@ the correct choice for this app.
 Use `CarUxRestrictionsManager` from `android.car.drivingstate` to listen for
 driving state changes and gate cell clicks accordingly.
 
-### compileOnly jar
+### useLibrary("android.car")
 
-`android.car` is a system API not present in the standard Android SDK. The jar
-is distributed as an optional platform library at:
-
-```text
-${android.sdkDirectory}/platforms/android-34/optional/android.car.jar
-```
-
-It is declared `compileOnly` so the Android toolchain resolves imports at build
-time. At runtime the system provides the real classes on the AAOS device. This
-pattern follows the same approach used for other optional Android system APIs.
+`android.car` is registered as an optional platform library in the Android SDK
+`optional.json` for API 29+. AGP's `useLibrary("android.car")` declaration
+inside the `android {}` block instructs the toolchain to add the jar to the
+compile classpath automatically, without needing to locate the jar by path.
+At runtime the system provides the real classes on the AAOS device.
 
 ### New Game button is not gated
 
@@ -65,15 +60,18 @@ all these environments. The graceful degradation strategy is to leave
 device running the full AAOS stack will always succeed and the catch block will
 never execute in production.
 
-### Car.createCar(Context) deprecation
+### Car.createCar API
 
-`Car.createCar(Context)` was deprecated in API level 31. The replacement is an
-asynchronous `createCar(Context, ServiceConnection)` variant. However, the
-async variant requires managing a `ServiceConnection` lifecycle and does not
-improve correctness for this use case. Because the app declares
-`android.hardware.type.automotive` as a required `uses-feature`, it will only
-run on AAOS devices where the Car service is guaranteed to be available
-synchronously. The synchronous overload is simpler and safe here.
+`Car.createCar(Context)` was deprecated in API level 31. The non-deprecated
+replacement, `Car.createCar(Context, Handler, long, CarServiceLifecycleListener)`,
+is available from API 29 — matching this app's `minSdk`. This implementation
+uses the lifecycle listener variant with `Handler(Looper.getMainLooper())` and
+`Car.CAR_WAIT_TIMEOUT_DO_NOT_WAIT`. The listener callback fires on the main
+thread when the Car service is ready, at which point `CarUxRestrictionsManager`
+is obtained and the UX restrictions listener is registered. On non-automotive
+devices the Car service is unavailable; `Car.createCar()` either throws or the
+lifecycle callback never fires, and the board remains interactive via the
+graceful-degradation catch block.
 
 ## Consequences
 
