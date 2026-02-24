@@ -115,13 +115,13 @@ class MinimaxTest {
 
     @Test
     fun `returns the only empty cell`() {
-        // Fill 8 cells leaving (2,2) empty; no winner yet
+        // Fill 8 cells leaving (2,2) empty; genuinely no winner
         // X O X
         // O X O
-        // X O _
+        // O X _
         board.makeMove(0, 0, Player.X); board.makeMove(0, 1, Player.O); board.makeMove(0, 2, Player.X)
         board.makeMove(1, 0, Player.O); board.makeMove(1, 1, Player.X); board.makeMove(1, 2, Player.O)
-        board.makeMove(2, 0, Player.X); board.makeMove(2, 1, Player.O)
+        board.makeMove(2, 0, Player.O); board.makeMove(2, 1, Player.X)
         val (row, col) = Minimax.bestMove(board, Player.O)
         assertEquals(2, row)
         assertEquals(2, col)

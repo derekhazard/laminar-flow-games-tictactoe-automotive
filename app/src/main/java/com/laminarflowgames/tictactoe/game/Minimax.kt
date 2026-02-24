@@ -22,6 +22,7 @@ object Minimax {
      * has been declared.
      */
     fun bestMove(board: GameBoard, cpuPlayer: Player): Pair<Int, Int> {
+        require(!board.isFull()) { "bestMove requires at least one empty cell" }
         var bestScore = Int.MIN_VALUE
         var bestRow = -1
         var bestCol = -1

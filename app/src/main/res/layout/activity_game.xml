@@ -45,14 +45,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/mode_two_player"
                 android:checked="true"
-                android:textSize="16sp" />
+                android:minHeight="72dp"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/rb_vs_cpu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mode_vs_cpu"
-                android:textSize="16sp" />
+                android:minHeight="72dp"
+                android:textSize="18sp" />
 
         </RadioGroup>
 
