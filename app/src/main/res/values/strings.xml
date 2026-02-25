@@ -10,6 +10,10 @@
     <string name="mode_two_player">2 Player</string>
     <string name="mode_single_player">1 Player</string>
     <string name="status_cpu_turn">CPU\'s turn\u2026</string>
-    <string name="score_display">X: %1$d  ·  Draws: %2$d  ·  O: %3$d</string>
+    <string name="status_initial">Player X\'s Turn</string>
+    <string name="score_header">Score</string>
+    <string name="score_label_x">X</string>
+    <string name="score_label_o">O</string>
+    <string name="score_label_draws">Draws</string>
     <string name="btn_new_round">Clear Score</string>
 </resources>

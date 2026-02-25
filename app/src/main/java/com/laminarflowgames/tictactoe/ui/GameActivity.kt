@@ -72,7 +72,9 @@ class GameActivity : AppCompatActivity() {
 
     // ── Views ─────────────────────────────────────────────────────────────────
 
-    private lateinit var tvScore: TextView
+    private lateinit var tvScoreX: TextView
+    private lateinit var tvScoreO: TextView
+    private lateinit var tvScoreDraws: TextView
     private lateinit var tvStatus: TextView
     private lateinit var cells: Array<Array<Button>>
     private lateinit var toggleMode: ToggleButton
@@ -110,7 +112,9 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        tvScore = findViewById(R.id.tv_score)
+        tvScoreX = findViewById(R.id.tv_score_x)
+        tvScoreO = findViewById(R.id.tv_score_o)
+        tvScoreDraws = findViewById(R.id.tv_score_draws)
         tvStatus = findViewById(R.id.tv_status)
         toggleMode = findViewById(R.id.toggle_mode)
         wireBoard()
@@ -201,6 +205,15 @@ class GameActivity : AppCompatActivity() {
         val btn = cells[row][col]
         val player = board.cellAt(row, col)
         btn.text = player?.name ?: ""
+        btn.setTextColor(
+            getColor(
+                when (player) {
+                    Player.X -> R.color.player_x
+                    Player.O -> R.color.player_o
+                    null -> R.color.text_primary
+                },
+            ),
+        )
         btn.contentDescription = if (player == null) {
             getString(R.string.cell_desc_empty, row + 1, col + 1)
         } else {
@@ -231,7 +244,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun updateScore() {
-        tvScore.text = getString(R.string.score_display, winsX, draws, winsO)
+        tvScoreX.text = winsX.toString()
+        tvScoreO.text = winsO.toString()
+        tvScoreDraws.text = draws.toString()
     }
 
     private fun clearBoard() {
