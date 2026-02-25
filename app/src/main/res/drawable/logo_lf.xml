@@ -17,7 +17,7 @@
     <!-- L: vertical bar -->
     <path
         android:pathData="M 10,5 L 10,42"
-        android:strokeColor="#FF00E5FF"
+        android:strokeColor="#FF0096C7"
         android:strokeWidth="5.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -25,7 +25,7 @@
     <!-- L: horizontal base -->
     <path
         android:pathData="M 10,42 L 28,42"
-        android:strokeColor="#FF00E5FF"
+        android:strokeColor="#FF0096C7"
         android:strokeWidth="5.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -57,7 +57,7 @@
     <!-- Flow line 1 — full opacity -->
     <path
         android:pathData="M 8,50 L 120,50"
-        android:strokeColor="#FF00E5FF"
+        android:strokeColor="#FF0096C7"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -65,7 +65,7 @@
     <!-- Flow line 2 — 60 % opacity -->
     <path
         android:pathData="M 8,55 L 140,55"
-        android:strokeColor="#9900E5FF"
+        android:strokeColor="#990096C7"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -73,7 +73,7 @@
     <!-- Flow line 3 — 30 % opacity -->
     <path
         android:pathData="M 8,60 L 158,60"
-        android:strokeColor="#4D00E5FF"
+        android:strokeColor="#4D0096C7"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
