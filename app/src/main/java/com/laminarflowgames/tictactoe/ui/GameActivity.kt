@@ -168,6 +168,7 @@ class GameActivity : AppCompatActivity() {
                 updateScore()
                 tvStatus.text = getString(R.string.status_winner, winner.name)
                 updateBoardEnabled()
+                mainHandler.removeCallbacks(autoNewGameRunnable)
                 mainHandler.postDelayed(autoNewGameRunnable, AUTO_NEW_GAME_DELAY_MS)
             }
             GameRules.isDraw(board) -> {
@@ -176,6 +177,7 @@ class GameActivity : AppCompatActivity() {
                 updateScore()
                 tvStatus.text = getString(R.string.status_draw)
                 updateBoardEnabled()
+                mainHandler.removeCallbacks(autoNewGameRunnable)
                 mainHandler.postDelayed(autoNewGameRunnable, AUTO_NEW_GAME_DELAY_MS)
             }
             else -> {
