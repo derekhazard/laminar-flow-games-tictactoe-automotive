@@ -278,7 +278,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="X"
+                        android:text="@string/score_label_x"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/text_primary"
@@ -298,7 +298,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="O"
+                        android:text="@string/score_label_o"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/text_primary"
@@ -318,7 +318,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Draws"
+                        android:text="@string/score_label_draws"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/text_primary"

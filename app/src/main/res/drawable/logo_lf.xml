@@ -3,9 +3,9 @@
     Laminar Flow Games — LF monogram with flow lines.
 
     Layout (160 × 65 viewport):
-      L  — cyan vertical + horizontal stroke, top-left
-      F  — off-white vertical + two horizontal strokes, beside L
-      ≡  — three parallel cyan lines below the letters, increasing length
+      L  — accent-colored vertical + horizontal stroke, top-left
+      F  — text_primary vertical + two horizontal strokes, beside L
+      ≡  — three parallel accent lines below the letters, increasing length
            to suggest fluid acceleration (laminar flow)
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,7 @@
     <!-- L: vertical bar -->
     <path
         android:pathData="M 10,5 L 10,42"
-        android:strokeColor="#FF0096C7"
+        android:strokeColor="@color/accent"
         android:strokeWidth="5.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -25,7 +25,7 @@
     <!-- L: horizontal base -->
     <path
         android:pathData="M 10,42 L 28,42"
-        android:strokeColor="#FF0096C7"
+        android:strokeColor="@color/accent"
         android:strokeWidth="5.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -33,7 +33,7 @@
     <!-- F: vertical bar -->
     <path
         android:pathData="M 36,5 L 36,42"
-        android:strokeColor="#FFE6EDF3"
+        android:strokeColor="@color/text_primary"
         android:strokeWidth="5.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -41,7 +41,7 @@
     <!-- F: top horizontal -->
     <path
         android:pathData="M 36,5 L 58,5"
-        android:strokeColor="#FFE6EDF3"
+        android:strokeColor="@color/text_primary"
         android:strokeWidth="5.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -49,7 +49,7 @@
     <!-- F: middle horizontal -->
     <path
         android:pathData="M 36,23 L 54,23"
-        android:strokeColor="#FFE6EDF3"
+        android:strokeColor="@color/text_primary"
         android:strokeWidth="5.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -57,7 +57,7 @@
     <!-- Flow line 1 — full opacity -->
     <path
         android:pathData="M 8,50 L 120,50"
-        android:strokeColor="#FF0096C7"
+        android:strokeColor="@color/accent"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -65,7 +65,7 @@
     <!-- Flow line 2 — 60 % opacity -->
     <path
         android:pathData="M 8,55 L 140,55"
-        android:strokeColor="#990096C7"
+        android:strokeColor="@color/accent_60"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
@@ -73,7 +73,7 @@
     <!-- Flow line 3 — 30 % opacity -->
     <path
         android:pathData="M 8,60 L 158,60"
-        android:strokeColor="#4D0096C7"
+        android:strokeColor="@color/accent_30"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
