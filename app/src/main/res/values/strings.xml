@@ -10,4 +10,6 @@
     <string name="mode_two_player">2 Player</string>
     <string name="mode_vs_cpu">vs CPU</string>
     <string name="status_cpu_turn">CPU\'s turn\u2026</string>
+    <string name="score_display">X: %1$d  ·  Draws: %2$d  ·  O: %3$d</string>
+    <string name="btn_new_round">New Round</string>
 </resources>

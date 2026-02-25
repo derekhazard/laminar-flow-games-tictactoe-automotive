@@ -50,6 +50,12 @@ class GameActivity : AppCompatActivity() {
     private var gameMode = GameMode.TWO_PLAYER
     private val cpuPlayer = Player.O
 
+    // ── Score state ───────────────────────────────────────────────────────────
+
+    private var winsX = 0
+    private var winsO = 0
+    private var draws = 0
+
     @Volatile
     private var isDrivingRestricted = false
 
@@ -65,6 +71,7 @@ class GameActivity : AppCompatActivity() {
 
     // ── Views ─────────────────────────────────────────────────────────────────
 
+    private lateinit var tvScore: TextView
     private lateinit var tvStatus: TextView
     private lateinit var cells: Array<Array<Button>>
     private lateinit var rgMode: RadioGroup
@@ -102,6 +109,7 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        tvScore = findViewById(R.id.tv_score)
         tvStatus = findViewById(R.id.tv_status)
         rgMode = findViewById(R.id.rg_mode)
         wireBoard()
@@ -110,7 +118,9 @@ class GameActivity : AppCompatActivity() {
             startNewGame()
         }
         findViewById<Button>(R.id.btn_new_game).setOnClickListener { startNewGame() }
+        findViewById<Button>(R.id.btn_new_round).setOnClickListener { startNewRound() }
         initCarUxRestrictions()
+        updateScore()
         updateStatus()
     }
 
@@ -152,11 +162,15 @@ class GameActivity : AppCompatActivity() {
         when {
             winner != null -> {
                 gameOver = true
+                if (winner == Player.X) winsX++ else winsO++
+                updateScore()
                 tvStatus.text = getString(R.string.status_winner, winner.name)
                 updateBoardEnabled()
             }
             GameRules.isDraw(board) -> {
                 gameOver = true
+                draws++
+                updateScore()
                 tvStatus.text = getString(R.string.status_draw)
                 updateBoardEnabled()
             }
@@ -214,6 +228,10 @@ class GameActivity : AppCompatActivity() {
         tvStatus.text = getString(R.string.status_turn, currentPlayer.name)
     }
 
+    private fun updateScore() {
+        tvScore.text = getString(R.string.score_display, winsX, draws, winsO)
+    }
+
     private fun startNewGame() {
         mainHandler.removeCallbacks(cpuMoveRunnable)
         isCpuThinking = false
@@ -223,6 +241,14 @@ class GameActivity : AppCompatActivity() {
         updateAllCells()
         updateBoardEnabled()
         updateStatus()
+    }
+
+    private fun startNewRound() {
+        winsX = 0
+        winsO = 0
+        draws = 0
+        updateScore()
+        startNewGame()
     }
 
     // ── CarUxRestrictions ─────────────────────────────────────────────────────
