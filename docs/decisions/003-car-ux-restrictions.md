@@ -36,14 +36,15 @@ inside the `android {}` block instructs the toolchain to add the jar to the
 compile classpath automatically, without needing to locate the jar by path.
 At runtime the system provides the real classes on the AAOS device.
 
-### New Game button is not gated
+### New Game and New Round buttons are not gated
 
-The "New Game" button resets game state in a single tap. It involves no
-multi-step interaction and poses negligible distraction risk. Gating it while
-driving would frustrate passengers who want to start a new game while parked
-at a traffic light or while the driver is focused on the road. This matches the
-AAOS distraction-optimisation guideline that simple, single-action controls
-may remain available.
+The "New Game" and "New Round" buttons each reset game state in a single tap.
+Neither involves multi-step interaction and both pose negligible distraction
+risk. Gating them while driving would frustrate passengers who want to start a
+fresh game while the driver is focused on the road. This matches the AAOS
+distraction-optimisation guideline that simple, single-action controls may
+remain available. New Round additionally resets the in-session score counters;
+this is equally low-distraction and does not warrant restriction.
 
 ### Broad Exception catch in initCarUxRestrictions
 
@@ -77,7 +78,7 @@ graceful-degradation catch block.
 
 - Board cells are disabled whenever `CarUxRestrictions.isRequiresDistractionOptimization`
   returns true, satisfying AAOS distraction guidelines.
-- The New Game button remains enabled at all times.
+- The New Game and New Round buttons remain enabled at all times.
 - On non-automotive devices (developer machines, CI emulators) the activity
   initialises without the Car service and the board is fully interactive.
 - If a future AAOS API requires migration away from `android.car` system API,
