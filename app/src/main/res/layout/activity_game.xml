@@ -86,8 +86,9 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:src="@drawable/logo_lf"
             android:contentDescription="@string/app_name"
             android:layout_marginBottom="12dp" />
@@ -240,44 +241,102 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <TextView
+        <!--
+            Score panel wrapper: wrap_content so the outer gravity="center"
+            treats it as a single unit. Items inside are start-aligned so the
+            "Score" title and the label column share the same left edge.
+        -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/score_header"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:orientation="vertical"
+            android:gravity="start">
 
-        <TextView
-            android:id="@+id/tv_score_x"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/text_primary"
-            tools:text="X  0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/score_header"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/tv_score_o"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/text_primary"
-            android:layout_marginTop="4dp"
-            tools:text="O  0" />
+            <!--
+                TableLayout auto-aligns all cells in the same column to the
+                same width, giving the two-column scoreboard appearance:
+                  label column   value column
+                  X              0
+                  O              0
+                  Draws          0
+            -->
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_score_draws"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/text_primary"
-            android:layout_marginTop="4dp"
-            tools:text="Draws  0" />
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="X"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/text_primary"
+                        android:paddingEnd="16dp" />
+
+                    <TextView
+                        android:id="@+id/tv_score_x"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/text_primary"
+                        tools:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="4dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="O"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/text_primary"
+                        android:paddingEnd="16dp" />
+
+                    <TextView
+                        android:id="@+id/tv_score_o"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/text_primary"
+                        tools:text="0" />
+                </TableRow>
+
+                <TableRow android:layout_marginTop="4dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Draws"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/text_primary"
+                        android:paddingEnd="16dp" />
+
+                    <TextView
+                        android:id="@+id/tv_score_draws"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/text_primary"
+                        tools:text="0" />
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

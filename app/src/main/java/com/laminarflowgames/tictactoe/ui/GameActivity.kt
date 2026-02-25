@@ -244,9 +244,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun updateScore() {
-        tvScoreX.text = getString(R.string.score_x, winsX)
-        tvScoreO.text = getString(R.string.score_o, winsO)
-        tvScoreDraws.text = getString(R.string.score_draws, draws)
+        tvScoreX.text = winsX.toString()
+        tvScoreO.text = winsO.toString()
+        tvScoreDraws.text = draws.toString()
     }
 
     private fun clearBoard() {
