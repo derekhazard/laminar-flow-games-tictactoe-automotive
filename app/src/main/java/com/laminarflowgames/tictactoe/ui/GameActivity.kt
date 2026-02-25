@@ -163,22 +163,12 @@ class GameActivity : AppCompatActivity() {
         val winner = GameRules.checkWinner(board)
         when {
             winner != null -> {
-                gameOver = true
                 if (winner == Player.X) winsX++ else winsO++
-                updateScore()
-                tvStatus.text = getString(R.string.status_winner, winner.name)
-                updateBoardEnabled()
-                mainHandler.removeCallbacks(autoNewGameRunnable)
-                mainHandler.postDelayed(autoNewGameRunnable, AUTO_NEW_GAME_DELAY_MS)
+                finishRound(getString(R.string.status_winner, winner.name))
             }
             GameRules.isDraw(board) -> {
-                gameOver = true
                 draws++
-                updateScore()
-                tvStatus.text = getString(R.string.status_draw)
-                updateBoardEnabled()
-                mainHandler.removeCallbacks(autoNewGameRunnable)
-                mainHandler.postDelayed(autoNewGameRunnable, AUTO_NEW_GAME_DELAY_MS)
+                finishRound(getString(R.string.status_draw))
             }
             else -> {
                 currentPlayer = currentPlayer.opponent()
@@ -189,6 +179,15 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun finishRound(statusText: String) {
+        gameOver = true
+        updateScore()
+        tvStatus.text = statusText
+        updateBoardEnabled()
+        mainHandler.removeCallbacks(autoNewGameRunnable)
+        mainHandler.postDelayed(autoNewGameRunnable, AUTO_NEW_GAME_DELAY_MS)
     }
 
     private fun scheduleCpuMove() {
