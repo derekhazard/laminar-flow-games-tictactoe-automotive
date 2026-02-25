@@ -201,6 +201,15 @@ class GameActivity : AppCompatActivity() {
         val btn = cells[row][col]
         val player = board.cellAt(row, col)
         btn.text = player?.name ?: ""
+        btn.setTextColor(
+            getColor(
+                when (player) {
+                    Player.X -> R.color.player_x
+                    Player.O -> R.color.player_o
+                    null -> R.color.text_primary
+                },
+            ),
+        )
         btn.contentDescription = if (player == null) {
             getString(R.string.cell_desc_empty, row + 1, col + 1)
         } else {
