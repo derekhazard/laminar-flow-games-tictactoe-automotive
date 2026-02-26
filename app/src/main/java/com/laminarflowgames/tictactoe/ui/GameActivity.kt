@@ -61,6 +61,7 @@ class GameActivity : AppCompatActivity() {
 
     @Volatile
     private var isDrivingRestricted = false
+    private var lastDrivingRestricted = false
 
     // ── CPU scheduling ────────────────────────────────────────────────────────
 
@@ -88,15 +89,16 @@ class GameActivity : AppCompatActivity() {
     private var uxRestrictionsManager: CarUxRestrictionsManager? = null
     private val uxListener = CarUxRestrictionsManager.OnUxRestrictionsChangedListener { restrictions ->
         isDrivingRestricted = restrictions.isRequiresDistractionOptimization
-        val cpuMoveWasInterrupted = !isDrivingRestricted &&
-            gameMode == GameMode.VS_CPU &&
+        val restrictionLifted = lastDrivingRestricted && !isDrivingRestricted
+        val cpuTurnPending = gameMode == GameMode.VS_CPU &&
             currentPlayer == cpuPlayer &&
             isCpuThinking &&
             !gameOver
-        if (cpuMoveWasInterrupted) {
+        if (restrictionLifted && cpuTurnPending) {
             mainHandler.removeCallbacks(cpuMoveRunnable)
             mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
         }
+        lastDrivingRestricted = isDrivingRestricted
         runOnUiThread { updateBoardEnabled() }
     }
     private val carLifecycleListener = Car.CarServiceLifecycleListener { connectedCar, ready ->
