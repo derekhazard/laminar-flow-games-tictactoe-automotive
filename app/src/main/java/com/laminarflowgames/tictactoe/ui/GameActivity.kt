@@ -273,7 +273,7 @@ class GameActivity : AppCompatActivity() {
 
     /** Activity-scoped constants. */
     companion object {
-        private const val CPU_MOVE_DELAY_MS = 500L
+        private const val CPU_MOVE_DELAY_MS = 1_000L
         private const val AUTO_CLEAR_BOARD_DELAY_MS = 3_000L
     }
 
