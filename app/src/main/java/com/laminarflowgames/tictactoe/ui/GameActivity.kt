@@ -198,7 +198,7 @@ class GameActivity : AppCompatActivity() {
         isCpuThinking = true
         updateBoardEnabled()
         tvStatus.text = getString(R.string.status_cpu_turn)
-        mainHandler.post(cpuMoveRunnable)
+        mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
     }
 
     private fun updateCell(row: Int, col: Int) {
@@ -273,6 +273,7 @@ class GameActivity : AppCompatActivity() {
 
     /** Activity-scoped constants. */
     companion object {
+        private const val CPU_MOVE_DELAY_MS = 500L
         private const val AUTO_CLEAR_BOARD_DELAY_MS = 3_000L
     }
 
