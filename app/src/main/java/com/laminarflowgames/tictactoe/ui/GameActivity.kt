@@ -34,10 +34,13 @@ import com.laminarflowgames.tictactoe.game.opponent
  * remain enabled because they are single, low-distraction actions.
  *
  * In [GameMode.VS_CPU] mode the human plays as X (always first mover) and the
- * CPU plays as O. After each human move the CPU move is deferred one frame via
- * [mainHandler] so the "CPU's turn…" status renders before minimax runs. The
- * pending [cpuMoveRunnable] is cancelled in [clearBoard] and [onDestroy] to
- * prevent stale moves against a reset or destroyed Activity.
+ * CPU plays as O. After each human move the CPU move is deferred by
+ * [CPU_MOVE_DELAY_MS] (1 second) via [mainHandler] so the "CPU's turn…" status
+ * is visible before minimax runs. If a driving restriction fires while the move
+ * is pending, [isCpuThinking] stays true (board remains locked) and the move is
+ * rescheduled when restrictions lift. The pending [cpuMoveRunnable] is cancelled
+ * in [clearBoard] and [onDestroy] to prevent stale moves against a reset or
+ * destroyed Activity.
  */
 class GameActivity : AppCompatActivity() {
 
@@ -63,8 +66,8 @@ class GameActivity : AppCompatActivity() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val cpuMoveRunnable = Runnable {
-        isCpuThinking = false
         if (gameOver || isDrivingRestricted) return@Runnable
+        isCpuThinking = false
         val (row, col) = Minimax.bestMove(board, cpuPlayer)
         onCellClicked(row, col)
     }
@@ -85,6 +88,15 @@ class GameActivity : AppCompatActivity() {
     private var uxRestrictionsManager: CarUxRestrictionsManager? = null
     private val uxListener = CarUxRestrictionsManager.OnUxRestrictionsChangedListener { restrictions ->
         isDrivingRestricted = restrictions.isRequiresDistractionOptimization
+        val cpuMoveWasInterrupted = !isDrivingRestricted &&
+            gameMode == GameMode.VS_CPU &&
+            currentPlayer == cpuPlayer &&
+            isCpuThinking &&
+            !gameOver
+        if (cpuMoveWasInterrupted) {
+            mainHandler.removeCallbacks(cpuMoveRunnable)
+            mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
+        }
         runOnUiThread { updateBoardEnabled() }
     }
     private val carLifecycleListener = Car.CarServiceLifecycleListener { connectedCar, ready ->
