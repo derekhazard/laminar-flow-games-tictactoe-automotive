@@ -74,6 +74,29 @@ class GameActivity : AppCompatActivity() {
     }
     private val autoClearBoardRunnable = Runnable { clearBoard() }
 
+    // ── Win flash ─────────────────────────────────────────────────────────────
+
+    private var lastWinLine: List<Pair<Int, Int>>? = null
+    private var winFlashStep = 0
+    private val winFlashRunnable = object : Runnable {
+        override fun run() {
+            val line = lastWinLine ?: return
+            // If a driving restriction fires mid-animation, abort the flash and
+            // restore the correct hard-locked state so no cell appears interactive.
+            if (isDrivingRestricted) {
+                highlightCells(line, false)
+                updateBoardEnabled()
+                return
+            }
+            // Even steps = highlight ON; odd steps = highlight OFF.
+            highlightCells(line, winFlashStep % 2 == 0)
+            winFlashStep++
+            if (winFlashStep < WIN_FLASH_COUNT * 2) {
+                mainHandler.postDelayed(this, WIN_FLASH_PERIOD_MS)
+            }
+        }
+    }
+
     // ── Views ─────────────────────────────────────────────────────────────────
 
     private lateinit var tvScoreX: TextView
@@ -151,6 +174,7 @@ class GameActivity : AppCompatActivity() {
     override fun onDestroy() {
         mainHandler.removeCallbacks(cpuMoveRunnable)
         mainHandler.removeCallbacks(autoClearBoardRunnable)
+        mainHandler.removeCallbacks(winFlashRunnable)
         uxRestrictionsManager?.unregisterListener()
         car?.disconnect()
         super.onDestroy()
@@ -183,6 +207,12 @@ class GameActivity : AppCompatActivity() {
         when {
             winner != null -> {
                 if (winner == Player.X) winsX++ else winsO++
+                GameRules.winningLine(board)?.let { line ->
+                    lastWinLine = line
+                    winFlashStep = 0
+                    mainHandler.removeCallbacks(winFlashRunnable)
+                    mainHandler.post(winFlashRunnable)
+                }
                 finishRound(getString(R.string.status_winner, winner.name))
             }
             GameRules.isDraw(board) -> {
@@ -236,19 +266,17 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateAllCells() {
-        for (row in 0..2) {
-            for (col in 0..2) {
-                updateCell(row, col)
-            }
-        }
-    }
-
     private fun updateBoardEnabled() {
         for (row in 0..2) {
             for (col in 0..2) {
-                cells[row][col].isEnabled =
-                    !gameOver && !isDrivingRestricted && !isCpuThinking && board.cellAt(row, col) == null
+                val btn = cells[row][col]
+                val isEmpty = board.cellAt(row, col) == null
+                // Hard-lock (disabled visual): game over, driving restriction, or occupied cell.
+                val hardLocked = gameOver || isDrivingRestricted || !isEmpty
+                btn.isEnabled = !hardLocked
+                // Soft-lock during CPU thinking: block interaction without the gray disabled look.
+                // The isCpuThinking guard in onCellClicked also prevents moves.
+                btn.isClickable = !hardLocked && !isCpuThinking
             }
         }
         toggleMode.isEnabled = !isDrivingRestricted
@@ -267,13 +295,31 @@ class GameActivity : AppCompatActivity() {
     private fun clearBoard() {
         mainHandler.removeCallbacks(cpuMoveRunnable)
         mainHandler.removeCallbacks(autoClearBoardRunnable)
+        mainHandler.removeCallbacks(winFlashRunnable)
+        lastWinLine = null
+        winFlashStep = 0
         isCpuThinking = false
         board.reset()
         currentPlayer = Player.X
         gameOver = false
-        updateAllCells()
+        for (row in 0..2) for (col in 0..2) {
+            updateCell(row, col)
+            cells[row][col].setBackgroundResource(R.drawable.bg_cell)
+        }
         updateBoardEnabled()
         updateStatus()
+    }
+
+    private fun highlightCells(line: List<Pair<Int, Int>>, highlight: Boolean) {
+        val drawableRes = if (highlight) R.drawable.bg_cell_win else R.drawable.bg_cell
+        line.forEach { (row, col) ->
+            val btn = cells[row][col]
+            // MaterialButton only renders setBackgroundResource() when enabled;
+            // toggling isEnabled here is intentional to make the flash visible.
+            // Clicks during the flash are harmless — onCellClicked guards on gameOver.
+            btn.isEnabled = highlight
+            btn.setBackgroundResource(drawableRes)
+        }
     }
 
     private fun clearScore() {
@@ -290,6 +336,8 @@ class GameActivity : AppCompatActivity() {
     companion object {
         private const val CPU_MOVE_DELAY_MS = 1_000L
         private const val AUTO_CLEAR_BOARD_DELAY_MS = 3_000L
+        private const val WIN_FLASH_COUNT = 3
+        private const val WIN_FLASH_PERIOD_MS = 350L
     }
 
     // ── CarUxRestrictions ─────────────────────────────────────────────────────

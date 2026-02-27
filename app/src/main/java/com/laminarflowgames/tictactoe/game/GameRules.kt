@@ -37,6 +37,23 @@ object GameRules {
     }
 
     /**
+     * Returns the three (row, col) pairs that form the winning line, or null if
+     * no winner exists yet.
+     *
+     * Mirrors the traversal of [checkWinner] so the two functions always agree.
+     */
+    fun winningLine(board: GameBoard): List<Pair<Int, Int>>? {
+        for (line in WIN_LINES) {
+            val (r0, c0) = line[0]
+            val (r1, c1) = line[1]
+            val (r2, c2) = line[2]
+            val a = board.cellAt(r0, c0)
+            if (a != null && a == board.cellAt(r1, c1) && a == board.cellAt(r2, c2)) return line
+        }
+        return null
+    }
+
+    /**
      * Returns true when the board is full and no player has won.
      *
      * Internally calls both [GameBoard.isFull] and [checkWinner]; callers do not
