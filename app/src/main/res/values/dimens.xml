@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Board -->
+    <dimen name="cell_size">155dp</dimen>
+    <dimen name="cell_margin">3dp</dimen>
+    <dimen name="grid_padding">4dp</dimen>
+    <dimen name="cell_corner_radius">8dp</dimen>
+    <dimen name="cell_text_size">64sp</dimen>
+
+    <!-- Typography -->
+    <dimen name="text_size_body">24sp</dimen>
+
+    <!-- Touch targets -->
+    <dimen name="touch_target_min_height">76dp</dimen>
+    <dimen name="button_corner_radius">36dp</dimen>
+    <dimen name="button_wrapper_width">220dp</dimen>
+    <dimen name="button_spacing">24dp</dimen>
+
+    <!-- Right column -->
+    <dimen name="logo_width">160dp</dimen>
+    <dimen name="logo_margin_top">107dp</dimen>
+    <dimen name="score_padding_end">16dp</dimen>
+    <dimen name="score_row_spacing">4dp</dimen>
+</resources>

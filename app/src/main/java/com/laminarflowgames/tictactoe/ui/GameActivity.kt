@@ -49,8 +49,9 @@ class GameActivity : AppCompatActivity() {
     private val board = GameBoard()
     private var currentPlayer = Player.X
     private var gameOver = false
+    @Volatile
     private var isCpuThinking = false
-    private var gameMode = GameMode.TWO_PLAYER
+    private var gameMode = GameMode.VS_CPU
     private val cpuPlayer = Player.O
 
     // ── Score state ───────────────────────────────────────────────────────────
@@ -99,6 +100,11 @@ class GameActivity : AppCompatActivity() {
 
     // ── Views ─────────────────────────────────────────────────────────────────
 
+    private lateinit var tvScoreHeader: TextView
+    private lateinit var tvScoreHeaderWins: TextView
+    private lateinit var tvLabelX: TextView
+    private lateinit var tvLabelO: TextView
+    private lateinit var tvLabelDraws: TextView
     private lateinit var tvScoreX: TextView
     private lateinit var tvScoreO: TextView
     private lateinit var tvScoreDraws: TextView
@@ -150,6 +156,11 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        tvScoreHeader = findViewById(R.id.tv_score_header)
+        tvScoreHeaderWins = findViewById(R.id.tv_score_header_wins)
+        tvLabelX = findViewById(R.id.tv_label_x)
+        tvLabelO = findViewById(R.id.tv_label_o)
+        tvLabelDraws = findViewById(R.id.tv_label_draws)
         tvScoreX = findViewById(R.id.tv_score_x)
         tvScoreO = findViewById(R.id.tv_score_o)
         tvScoreDraws = findViewById(R.id.tv_score_draws)
@@ -197,6 +208,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun onCellClicked(row: Int, col: Int) {
         if (gameOver || isDrivingRestricted || isCpuThinking) return
         if (!GameRules.isValidMove(board, row, col)) return
@@ -213,11 +225,18 @@ class GameActivity : AppCompatActivity() {
                     mainHandler.removeCallbacks(winFlashRunnable)
                     mainHandler.post(winFlashRunnable)
                 }
-                finishRound(getString(R.string.status_winner, winner.name))
+                val isX = winner == Player.X
+                val winColor = getColor(if (isX) R.color.player_x else R.color.player_o)
+                val winText = if (gameMode == GameMode.VS_CPU) {
+                    getString(if (isX) R.string.status_you_win else R.string.status_android_wins)
+                } else {
+                    getString(R.string.status_winner, winner.name)
+                }
+                finishRound(winText, winColor)
             }
             GameRules.isDraw(board) -> {
                 draws++
-                finishRound(getString(R.string.status_draw))
+                finishRound(getString(R.string.status_draw), getColor(R.color.accent))
             }
             else -> {
                 currentPlayer = currentPlayer.opponent()
@@ -230,10 +249,11 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishRound(statusText: String) {
+    private fun finishRound(statusText: String, statusColor: Int) {
         gameOver = true
         updateScore()
         tvStatus.text = statusText
+        tvStatus.setTextColor(statusColor)
         updateBoardEnabled()
         mainHandler.removeCallbacks(autoClearBoardRunnable)
         mainHandler.postDelayed(autoClearBoardRunnable, AUTO_CLEAR_BOARD_DELAY_MS)
@@ -243,6 +263,7 @@ class GameActivity : AppCompatActivity() {
         isCpuThinking = true
         updateBoardEnabled()
         tvStatus.text = getString(R.string.status_cpu_turn)
+        tvStatus.setTextColor(getColor(R.color.player_o))
         mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
     }
 
@@ -283,10 +304,24 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun updateStatus() {
-        tvStatus.text = getString(R.string.status_turn, currentPlayer.name)
+        if (gameMode == GameMode.VS_CPU) {
+            tvStatus.text = getString(R.string.status_your_turn)
+            tvStatus.setTextColor(getColor(R.color.text_primary))
+        } else {
+            tvStatus.text = getString(R.string.status_turn, currentPlayer.name)
+            val colorRes = if (currentPlayer == Player.O) R.color.player_o else R.color.text_primary
+            tvStatus.setTextColor(getColor(colorRes))
+        }
     }
 
     private fun updateScore() {
+        if (gameMode == GameMode.VS_CPU) {
+            tvLabelX.text = getString(R.string.score_label_you)
+            tvLabelO.text = getString(R.string.score_label_android)
+        } else {
+            tvLabelX.text = getString(R.string.score_label_x)
+            tvLabelO.text = getString(R.string.score_label_o)
+        }
         tvScoreX.text = winsX.toString()
         tvScoreO.text = winsO.toString()
         tvScoreDraws.text = draws.toString()

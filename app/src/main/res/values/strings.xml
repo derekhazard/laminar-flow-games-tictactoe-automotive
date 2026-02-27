@@ -10,11 +10,17 @@
     <string name="cell_desc_occupied">Row %1$d, Column %2$d, %3$s</string>
     <string name="mode_two_player">2 Player</string>
     <string name="mode_single_player">1 Player</string>
-    <string name="status_cpu_turn">CPU\'s turn\u2026</string>
-    <string name="status_initial">Player X\'s Turn</string>
-    <string name="score_header">Score</string>
+    <string name="status_cpu_turn">Android\'s turn</string>
+    <string name="status_your_turn">Your turn</string>
+    <string name="status_initial">Your turn</string>
+    <string name="score_header_player">Player</string>
+    <string name="score_header_wins">Wins</string>
     <string name="score_label_x">X</string>
     <string name="score_label_o">O</string>
+    <string name="score_label_you">You</string>
+    <string name="score_label_android">Android</string>
     <string name="score_label_draws">Draws</string>
+    <string name="status_you_win">You win!</string>
+    <string name="status_android_wins">Android wins!</string>
     <string name="btn_new_round">Clear Score</string>
 </resources>

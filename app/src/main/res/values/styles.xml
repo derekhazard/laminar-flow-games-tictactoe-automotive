@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base body text: 24sp sans-serif-medium. Used for score values. -->
+    <style name="TextAppearance.Cockpit.Body" parent="">
+        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- All-caps label text: body + caps + letter spacing. Used for titles,
+         status, toggle, and score row labels. -->
+    <style name="TextAppearance.Cockpit.Label" parent="TextAppearance.Cockpit.Body">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.0892857143</item>
+    </style>
+
+</resources>

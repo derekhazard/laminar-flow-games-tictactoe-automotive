@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Launcher icon foreground — 3×3 tic-tac-toe grid with X marks on the
-    main diagonal (top-left, centre, bottom-right).
+    Launcher icon foreground — LF monogram over a subtle 3×3 tic-tac-toe grid.
 
     Sizing rationale:
       The AAOS launcher clips the adaptive icon to the safe-zone circle:
       radius 36 centred at (54,54) in the 108×108 viewport.
-      For the board's four corners to just touch that circle:
-        side = 36 × √2 ≈ 50.9 dp  →  board (29,29)→(79,79)
-        corner distance from centre = 25√2 ≈ 35.4 dp  ✓ inside radius 36
+      Board (29,29)→(79,79) fits inside the safe zone (corner distance ≈ 35.4 dp).
 
-    Grid (each cell ≈16–17 dp):
-      columns/rows: 29  46  62  79
-    Outer boundary: (29,29)→(79,79).
-    Grid dividers at x=46, x=62 (vertical) and y=46, y=62 (horizontal).
+    Grid (subtle, behind letters):
+      Bounding box: (29,29)→(79,79).  Dividers at x={46,62} and y={46,62}.
+      Color: #30363D, strokeWidth 2 (thinner than letters to recede visually).
 
-    X marks (10% smaller than cell padding, strokeWidth 5):
-      cell (0,0)  centre (37.5,37.5)  half-span 4.95  →  arms (32.5,32.5)↔(42.5,42.5)  (42.5,32.5)↔(32.5,42.5)
-      cell (1,1)  centre (54,54)      half-span 4.5   →  arms (49.5,49.5)↔(58.5,58.5)  (58.5,49.5)↔(49.5,58.5)
-      cell (2,2)  centre (70.5,70.5)  half-span 4.95  →  arms (65.5,65.5)↔(75.5,75.5)  (75.5,65.5)↔(65.5,75.5)
+    LF monogram (scaled from logo_lf.xml 48×37 letter area into the 50×50 grid,
+    with 2dp inset for clearance from grid edges):
+      L — accent blue #00B4D8, strokeWidth 4, strokeLineCap round.
+      F — light gray #E6EDF3, strokeWidth 4, strokeLineCap round.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -30,76 +26,74 @@
     <path
         android:pathData="M29,29 L79,29 L79,79 L29,79 Z"
         android:strokeColor="#30363D"
-        android:strokeWidth="3"
+        android:strokeWidth="2"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
         android:fillColor="#00000000" />
 
-    <!-- Grid dividers — subtle border colour -->
+    <!-- Grid dividers — subtle, behind letters -->
     <path
         android:pathData="M46,29 L46,79"
         android:strokeColor="#30363D"
-        android:strokeWidth="3"
+        android:strokeWidth="2"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
     <path
         android:pathData="M62,29 L62,79"
         android:strokeColor="#30363D"
-        android:strokeWidth="3"
+        android:strokeWidth="2"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
     <path
         android:pathData="M29,46 L79,46"
         android:strokeColor="#30363D"
-        android:strokeWidth="3"
+        android:strokeWidth="2"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
     <path
         android:pathData="M29,62 L79,62"
         android:strokeColor="#30363D"
-        android:strokeWidth="3"
+        android:strokeWidth="2"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
 
-    <!-- X — cell (0,0) top-left -->
+    <!-- L: vertical bar -->
     <path
-        android:pathData="M32.5,32.5 L42.5,42.5"
-        android:strokeColor="#0096C7"
-        android:strokeWidth="5"
-        android:strokeLineCap="round"
-        android:fillColor="#00000000" />
-    <path
-        android:pathData="M42.5,32.5 L32.5,42.5"
-        android:strokeColor="#0096C7"
-        android:strokeWidth="5"
+        android:pathData="M31,36 L31,72"
+        android:strokeColor="#00B4D8"
+        android:strokeWidth="4"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
 
-    <!-- X — cell (1,1) centre -->
+    <!-- L: horizontal base -->
     <path
-        android:pathData="M49.5,49.5 L58.5,58.5"
-        android:strokeColor="#0096C7"
-        android:strokeWidth="5"
-        android:strokeLineCap="round"
-        android:fillColor="#00000000" />
-    <path
-        android:pathData="M58.5,49.5 L49.5,58.5"
-        android:strokeColor="#0096C7"
-        android:strokeWidth="5"
+        android:pathData="M31,72 L48,72"
+        android:strokeColor="#00B4D8"
+        android:strokeWidth="4"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
 
-    <!-- X — cell (2,2) bottom-right -->
+    <!-- F: vertical bar -->
     <path
-        android:pathData="M65.5,65.5 L75.5,75.5"
-        android:strokeColor="#0096C7"
-        android:strokeWidth="5"
+        android:pathData="M56,36 L56,72"
+        android:strokeColor="#E6EDF3"
+        android:strokeWidth="4"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
+
+    <!-- F: top horizontal -->
     <path
-        android:pathData="M75.5,65.5 L65.5,75.5"
-        android:strokeColor="#0096C7"
-        android:strokeWidth="5"
+        android:pathData="M56,36 L77,36"
+        android:strokeColor="#E6EDF3"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- F: middle horizontal -->
+    <path
+        android:pathData="M56,53 L73,53"
+        android:strokeColor="#E6EDF3"
+        android:strokeWidth="4"
         android:strokeLineCap="round"
         android:fillColor="#00000000" />
 

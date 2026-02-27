@@ -8,7 +8,6 @@ appcompat = "1.6.1"
 material = "1.10.0"
 ktlintGradle = "12.1.1"
 detekt = "1.23.8"
-mockk = "1.13.12"
 robolectric = "4.13"
 
 [libraries]
@@ -18,7 +17,6 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
 [plugins]
