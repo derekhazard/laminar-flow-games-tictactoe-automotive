@@ -34,10 +34,13 @@ import com.laminarflowgames.tictactoe.game.opponent
  * remain enabled because they are single, low-distraction actions.
  *
  * In [GameMode.VS_CPU] mode the human plays as X (always first mover) and the
- * CPU plays as O. After each human move the CPU move is deferred one frame via
- * [mainHandler] so the "CPU's turn…" status renders before minimax runs. The
- * pending [cpuMoveRunnable] is cancelled in [clearBoard] and [onDestroy] to
- * prevent stale moves against a reset or destroyed Activity.
+ * CPU plays as O. After each human move the CPU move is deferred by
+ * [CPU_MOVE_DELAY_MS] (1 second) via [mainHandler] so the "CPU's turn…" status
+ * is visible before minimax runs. If a driving restriction fires while the move
+ * is pending, [isCpuThinking] stays true (board remains locked) and the move is
+ * rescheduled when restrictions lift. The pending [cpuMoveRunnable] is cancelled
+ * in [clearBoard] and [onDestroy] to prevent stale moves against a reset or
+ * destroyed Activity.
  */
 class GameActivity : AppCompatActivity() {
 
@@ -58,13 +61,14 @@ class GameActivity : AppCompatActivity() {
 
     @Volatile
     private var isDrivingRestricted = false
+    private var lastDrivingRestricted = false
 
     // ── CPU scheduling ────────────────────────────────────────────────────────
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private val cpuMoveRunnable = Runnable {
-        isCpuThinking = false
         if (gameOver || isDrivingRestricted) return@Runnable
+        isCpuThinking = false
         val (row, col) = Minimax.bestMove(board, cpuPlayer)
         onCellClicked(row, col)
     }
@@ -85,6 +89,16 @@ class GameActivity : AppCompatActivity() {
     private var uxRestrictionsManager: CarUxRestrictionsManager? = null
     private val uxListener = CarUxRestrictionsManager.OnUxRestrictionsChangedListener { restrictions ->
         isDrivingRestricted = restrictions.isRequiresDistractionOptimization
+        val restrictionLifted = lastDrivingRestricted && !isDrivingRestricted
+        val cpuTurnPending = gameMode == GameMode.VS_CPU &&
+            currentPlayer == cpuPlayer &&
+            isCpuThinking &&
+            !gameOver
+        if (restrictionLifted && cpuTurnPending) {
+            mainHandler.removeCallbacks(cpuMoveRunnable)
+            mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
+        }
+        lastDrivingRestricted = isDrivingRestricted
         runOnUiThread { updateBoardEnabled() }
     }
     private val carLifecycleListener = Car.CarServiceLifecycleListener { connectedCar, ready ->
@@ -94,6 +108,7 @@ class GameActivity : AppCompatActivity() {
             uxRestrictionsManager?.registerListener(uxListener)
             uxRestrictionsManager?.currentCarUxRestrictions?.let { restrictions ->
                 isDrivingRestricted = restrictions.isRequiresDistractionOptimization
+                lastDrivingRestricted = isDrivingRestricted
                 updateBoardEnabled()
             }
         } else {
@@ -198,7 +213,7 @@ class GameActivity : AppCompatActivity() {
         isCpuThinking = true
         updateBoardEnabled()
         tvStatus.text = getString(R.string.status_cpu_turn)
-        mainHandler.post(cpuMoveRunnable)
+        mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
     }
 
     private fun updateCell(row: Int, col: Int) {
@@ -273,6 +288,7 @@ class GameActivity : AppCompatActivity() {
 
     /** Activity-scoped constants. */
     companion object {
+        private const val CPU_MOVE_DELAY_MS = 1_000L
         private const val AUTO_CLEAR_BOARD_DELAY_MS = 3_000L
     }
 

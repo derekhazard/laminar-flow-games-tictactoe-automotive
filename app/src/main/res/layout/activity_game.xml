@@ -3,8 +3,8 @@
     Three-column landscape layout for AAOS automotive_1024p_landscape (1024×600 dp):
 
       Left  (weight=1)  — buttons stack, vertically centered
-      Center (weight=0) — logo ↑ board ↓ status, vertically centered
-      Right  (weight=1) — score panel, vertically centered
+      Center (weight=0) — title ↑ board ↓ status, vertically centered
+      Right  (weight=1) — logo upper half, score panel lower half
 
     weight=1 on both outer columns ensures the board is horizontally centered
     and the score panel is equidistant from the board's right edge and the
@@ -78,19 +78,20 @@
 
     </LinearLayout>
 
-    <!-- ── Center column: logo → board → status ── -->
+    <!-- ── Center column: title → board → status ── -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
 
-        <ImageView
-            android:layout_width="80dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/logo_lf"
-            android:contentDescription="@string/app_name"
+            android:text="@string/game_title"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="12dp" />
 
         <!-- 3×3 board — 155dp cells, 3dp margins, 4dp grid padding -->
@@ -233,22 +234,47 @@
 
     </LinearLayout>
 
-    <!-- ── Right column: score panel centered ── -->
+    <!-- ── Right column: logo centre → row-0 centre, score centre → row-1 centre ── -->
+    <!--
+        Geometry (screen 600 dp tall):
+          Centre column gravity="center"; content height 559 dp → top offset 20.5 dp.
+          GridLayout top = 20.5 + title(22) + margin(12) = 54.5 dp.
+          Row-0 centre = 54.5 + padding(4) + margin(3) + half-cell(77.5) = 139 dp.
+          Row-1 centre = 139 + margin(3)+cell(155)+margin(3)+margin(3) = 300 dp (approx).
+
+          Logo SVG 160×65 dp → rendered height = 65 dp.
+          Logo marginTop = 139 − 65/2 = 107 dp  →  logo centre ≈ 139 dp ✓
+
+          Score panel ≈ 104 dp tall (title 22 + gap 8 + 3 rows ×22 + 2 gaps ×4).
+          Logo bottom = 107 + 65 = 172 dp.
+          Score marginTop = 300 − 104/2 − 172 = 76 dp  →  score centre ≈ 300 dp ✓
+    -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <!--
-            Score panel wrapper: wrap_content so the outer gravity="center"
-            treats it as a single unit. Items inside are start-aligned so the
-            "Score" title and the label column share the same left edge.
-        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="107dp"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/logo_lf"
+                android:contentDescription="@string/app_name" />
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="76dp"
             android:orientation="vertical"
             android:gravity="start">
 

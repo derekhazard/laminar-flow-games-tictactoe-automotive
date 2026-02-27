@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Laminar Flow Games Tictactoe</string>
+    <string name="game_title">Tic-Tac-Toe</string>
     <string name="btn_new_game">Clear Board</string>
     <string name="cell_empty_description">Empty cell</string>
     <string name="status_turn">Player %1$s\'s turn</string>
