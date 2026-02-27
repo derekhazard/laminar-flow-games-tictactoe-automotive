@@ -117,23 +117,29 @@ internal class GameActivityTest {
 
     @Test
     fun `mode toggle clears board and score`() {
-        // Play a move in single-player mode, then toggle to two-player.
-        cells[0][0].performClick() // X places
-        assertEquals("X", cells[0][0].text.toString())
-
         val tvScoreX: TextView = activity.findViewById(R.id.tv_score_x)
-        // Score not yet incremented (game not over), but board has a move.
 
+        // Start in two-player mode and play a full X win to increment the score.
         activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+        cells[0][0].performClick() // X
+        cells[1][0].performClick() // O
+        cells[0][1].performClick() // X
+        cells[1][1].performClick() // O
+        cells[0][2].performClick() // X — wins
+
+        assertEquals("Score should be 1 after X wins", "1", tvScoreX.text.toString())
+
+        // Toggle to single-player — should clear board AND score.
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = false
 
         // Board should be cleared.
         assertEquals("", cells[0][0].text.toString())
 
-        // Score labels should switch to "X" / "O" (two-player labels).
+        // Score labels should switch to single-player labels.
         val tvLabelX: TextView = activity.findViewById(R.id.tv_label_x)
-        assertEquals(activity.getString(R.string.score_label_x), tvLabelX.text.toString())
+        assertEquals(activity.getString(R.string.score_label_you), tvLabelX.text.toString())
 
-        // Scores should be zero.
+        // Score should be reset to zero.
         assertEquals("0", tvScoreX.text.toString())
     }
 
