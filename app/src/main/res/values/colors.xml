@@ -11,6 +11,7 @@
     <color name="cell_border">#FF30363D</color>
     <color name="accent_60">#990096C7</color>
     <color name="accent_30">#4D0096C7</color>
+    <color name="win_highlight">#FF1F3D2A</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
 </resources>
