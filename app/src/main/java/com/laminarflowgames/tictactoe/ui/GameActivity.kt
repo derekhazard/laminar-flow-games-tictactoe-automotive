@@ -108,6 +108,7 @@ class GameActivity : AppCompatActivity() {
             uxRestrictionsManager?.registerListener(uxListener)
             uxRestrictionsManager?.currentCarUxRestrictions?.let { restrictions ->
                 isDrivingRestricted = restrictions.isRequiresDistractionOptimization
+                lastDrivingRestricted = isDrivingRestricted
                 updateBoardEnabled()
             }
         } else {
