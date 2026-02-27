@@ -42,10 +42,7 @@
                 android:textOn="@string/mode_two_player"
                 android:textOff="@string/mode_single_player"
                 android:checked="false"
-                android:textAllCaps="true"
-                android:letterSpacing="0.0892857143"
-                android:textSize="@dimen/text_size_body"
-                android:fontFamily="sans-serif-medium"
+                android:textAppearance="@style/TextAppearance.Cockpit.Label"
                 android:textColor="@color/toggle_text"
                 android:background="@drawable/bg_toggle"
                 android:minHeight="@dimen/touch_target_min_height" />
@@ -57,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/button_spacing"
                 android:text="@string/btn_new_game"
-                android:textSize="@dimen/text_size_body"
+                android:textAppearance="@style/TextAppearance.Cockpit.Body"
                 android:textColor="@color/white"
                 android:minHeight="@dimen/touch_target_min_height"
                 app:cornerRadius="@dimen/button_corner_radius"
@@ -70,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/button_spacing"
                 android:text="@string/btn_new_round"
-                android:textSize="@dimen/text_size_body"
+                android:textAppearance="@style/TextAppearance.Cockpit.Body"
                 android:textColor="@color/white"
                 android:minHeight="@dimen/touch_target_min_height"
                 app:cornerRadius="@dimen/button_corner_radius"
@@ -96,10 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/game_title"
-            android:textAllCaps="true"
-            android:letterSpacing="0.0892857143"
-            android:textSize="@dimen/text_size_body"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/TextAppearance.Cockpit.Label"
             android:textColor="@color/text_primary"
             android:layout_gravity="center_horizontal" />
 
@@ -245,10 +239,7 @@
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:letterSpacing="0.0892857143"
-            android:textSize="@dimen/text_size_body"
-            android:fontFamily="sans-serif-medium"
+            android:textAppearance="@style/TextAppearance.Cockpit.Label"
             android:textColor="@color/text_primary"
             android:text="@string/status_initial"
             android:layout_gravity="center_horizontal" />
@@ -306,10 +297,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/score_header_player"
-                        android:textAllCaps="true"
-                        android:letterSpacing="0.0892857143"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Label"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
                         android:paddingEnd="@dimen/score_padding_end" />
@@ -319,10 +307,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/score_header_wins"
-                        android:textAllCaps="true"
-                        android:letterSpacing="0.0892857143"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Label"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary" />
                 </TableRow>
@@ -333,10 +318,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/score_label_x"
-                        android:textAllCaps="true"
-                        android:letterSpacing="0.0892857143"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Label"
                         android:textColor="@color/player_x"
                         android:paddingEnd="@dimen/score_padding_end" />
 
@@ -345,8 +327,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Body"
                         android:textColor="@color/player_x" />
                 </TableRow>
 
@@ -356,10 +337,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/score_label_o"
-                        android:textAllCaps="true"
-                        android:letterSpacing="0.0892857143"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Label"
                         android:textColor="@color/player_o"
                         android:paddingEnd="@dimen/score_padding_end" />
 
@@ -368,8 +346,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Body"
                         android:textColor="@color/player_o" />
                 </TableRow>
 
@@ -379,10 +356,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/score_label_draws"
-                        android:textAllCaps="true"
-                        android:letterSpacing="0.0892857143"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Label"
                         android:textColor="@color/accent"
                         android:paddingEnd="@dimen/score_padding_end" />
 
@@ -391,8 +365,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textSize="@dimen/text_size_body"
-                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.Cockpit.Body"
                         android:textColor="@color/accent" />
                 </TableRow>
 

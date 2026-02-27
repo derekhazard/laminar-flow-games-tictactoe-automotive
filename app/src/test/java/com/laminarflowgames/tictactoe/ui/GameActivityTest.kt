@@ -71,19 +71,10 @@ internal class GameActivityTest {
     fun `two-player draw shows draw status`() {
         activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
 
-        // Classic draw pattern:
+        // Draw pattern (alternating X, O):
         //   X | O | X
         //   X | X | O
         //   O | X | O
-        cells[0][0].performClick() // X
-        cells[0][1].performClick() // O
-        cells[0][2].performClick() // X
-        cells[1][1].performClick() // O — wait, need X to go first each turn
-        // Let me redo: alternating X, O
-        // After toggle, clearScore resets board. Moves above already fired.
-        // Start fresh — use clearBoard.
-        activity.findViewById<Button>(R.id.btn_new_game).performClick()
-
         cells[0][0].performClick() // X
         cells[0][1].performClick() // O
         cells[0][2].performClick() // X
