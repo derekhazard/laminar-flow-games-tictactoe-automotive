@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Winning-cell highlight background — same shape as bg_cell but filled with
-    win_highlight (deep forest green) so that both the blue X and orange O
+    win_highlight (deep forest green) so that both the white X and orange O
     glyphs remain clearly legible in a dark cockpit environment.
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"

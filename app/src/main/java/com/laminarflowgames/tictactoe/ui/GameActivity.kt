@@ -81,6 +81,13 @@ class GameActivity : AppCompatActivity() {
     private val winFlashRunnable = object : Runnable {
         override fun run() {
             val line = lastWinLine ?: return
+            // If a driving restriction fires mid-animation, abort the flash and
+            // restore the correct hard-locked state so no cell appears interactive.
+            if (isDrivingRestricted) {
+                highlightCells(line, false)
+                updateBoardEnabled()
+                return
+            }
             // Even steps = highlight ON; odd steps = highlight OFF.
             highlightCells(line, winFlashStep % 2 == 0)
             winFlashStep++
@@ -307,6 +314,9 @@ class GameActivity : AppCompatActivity() {
         val drawableRes = if (highlight) R.drawable.bg_cell_win else R.drawable.bg_cell
         line.forEach { (row, col) ->
             val btn = cells[row][col]
+            // MaterialButton only renders setBackgroundResource() when enabled;
+            // toggling isEnabled here is intentional to make the flash visible.
+            // Clicks during the flash are harmless — onCellClicked guards on gameOver.
             btn.isEnabled = highlight
             btn.setBackgroundResource(drawableRes)
         }
