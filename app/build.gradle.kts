@@ -35,10 +35,10 @@ android {
     val keyPasswordValue = localProperties.getProperty("UPLOAD_KEY_PASSWORD")
 
     val hasReleaseSigningProps =
-        keystoreFile != null &&
-            keystorePassword != null &&
-            keyAliasValue != null &&
-            keyPasswordValue != null
+        !keystoreFile.isNullOrBlank() &&
+            !keystorePassword.isNullOrBlank() &&
+            !keyAliasValue.isNullOrBlank() &&
+            !keyPasswordValue.isNullOrBlank()
 
     if (hasReleaseSigningProps) {
         signingConfigs {
