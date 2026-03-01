@@ -29,16 +29,24 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val keystoreFile = localProperties.getProperty("UPLOAD_KEYSTORE_FILE")
+    val keystorePassword = localProperties.getProperty("UPLOAD_KEYSTORE_PASSWORD")
+    val keyAliasValue = localProperties.getProperty("UPLOAD_KEY_ALIAS")
+    val keyPasswordValue = localProperties.getProperty("UPLOAD_KEY_PASSWORD")
+
     val hasReleaseSigningProps =
-        localProperties.getProperty("UPLOAD_KEYSTORE_FILE") != null
+        keystoreFile != null &&
+            keystorePassword != null &&
+            keyAliasValue != null &&
+            keyPasswordValue != null
 
     if (hasReleaseSigningProps) {
         signingConfigs {
             create("release") {
-                storeFile = file(localProperties.getProperty("UPLOAD_KEYSTORE_FILE"))
-                storePassword = localProperties.getProperty("UPLOAD_KEYSTORE_PASSWORD")
-                keyAlias = localProperties.getProperty("UPLOAD_KEY_ALIAS")
-                keyPassword = localProperties.getProperty("UPLOAD_KEY_PASSWORD")
+                storeFile = file(keystoreFile!!)
+                storePassword = keystorePassword
+                keyAlias = keyAliasValue
+                keyPassword = keyPasswordValue
             }
         }
     }
