@@ -1,9 +1,17 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.detekt)
     jacoco
 }
+
+val localProperties =
+    Properties().also { props ->
+        rootProject.file("local.properties").takeIf { it.exists() }
+            ?.reader()?.use { props.load(it) }
+    }
 
 android {
     namespace = "com.laminarflowgames.tictactoe"
@@ -21,6 +29,15 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(localProperties.getProperty("UPLOAD_KEYSTORE_FILE"))
+            storePassword = localProperties.getProperty("UPLOAD_KEYSTORE_PASSWORD")
+            keyAlias = localProperties.getProperty("UPLOAD_KEY_ALIAS")
+            keyPassword = localProperties.getProperty("UPLOAD_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         debug {
             enableUnitTestCoverage = true
@@ -28,6 +45,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
