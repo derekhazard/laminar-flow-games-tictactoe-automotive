@@ -9,8 +9,11 @@ plugins {
 
 val localProperties =
     Properties().also { props ->
-        rootProject.file("local.properties").takeIf { it.exists() }
-            ?.reader()?.use { props.load(it) }
+        rootProject
+            .file("local.properties")
+            .takeIf { it.exists() }
+            ?.reader()
+            ?.use { props.load(it) }
     }
 
 android {
