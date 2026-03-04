@@ -22,9 +22,9 @@ Reference copy for Google Play Console entry. English (US) only.
 >
 > BUILT FOR THE CAR
 > • Dark cockpit theme reduces glare and eye strain
-> • Complies with Car UX Restrictions — the board automatically locks while driving
+> • Complies with Car UX Restrictions — board moves are disabled while driving
 > • Large touch targets sized for in-car displays
-> • Lightweight at just 1.2 MB
+> • Lightweight footprint
 >
 > PRIVACY FIRST
 > • No permissions required
@@ -36,9 +36,9 @@ Reference copy for Google Play Console entry. English (US) only.
 > FEATURES
 > • In-session scorekeeping for X, O, and draws
 > • Auto-clear after each round for continuous play
-> • One-tap mode switching between single and two player
+> • One-tap mode switching between single and two player (when parked)
 > • Clean, modern UI with distinct colors for X and O
 >
 > A simple, polished game that respects your privacy and your attention on the road.
 
-(894 characters)
+(886 characters)
