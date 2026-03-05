@@ -242,7 +242,8 @@
             android:textAppearance="@style/TextAppearance.Cockpit.Label"
             android:textColor="@color/text_primary"
             android:text="@string/status_initial"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:accessibilityLiveRegion="polite" />
 
         <Space
             android:layout_width="match_parent"
@@ -328,7 +329,8 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textAppearance="@style/TextAppearance.Cockpit.Body"
-                        android:textColor="@color/player_x" />
+                        android:textColor="@color/player_x"
+                        android:accessibilityLiveRegion="polite" />
                 </TableRow>
 
                 <TableRow android:layout_marginTop="@dimen/score_row_spacing">
@@ -347,7 +349,8 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textAppearance="@style/TextAppearance.Cockpit.Body"
-                        android:textColor="@color/player_o" />
+                        android:textColor="@color/player_o"
+                        android:accessibilityLiveRegion="polite" />
                 </TableRow>
 
                 <TableRow android:layout_marginTop="@dimen/score_row_spacing">
@@ -366,7 +369,8 @@
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textAppearance="@style/TextAppearance.Cockpit.Body"
-                        android:textColor="@color/accent" />
+                        android:textColor="@color/accent"
+                        android:accessibilityLiveRegion="polite" />
                 </TableRow>
 
             </TableLayout>

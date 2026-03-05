@@ -143,6 +143,185 @@ internal class GameActivityTest {
         assertEquals("0", tvScoreX.text.toString())
     }
 
+    // ── Score tracking ────────────────────────────────────────────────────────
+
+    @Test
+    fun `score increments on consecutive wins`() {
+        val tvScoreX: TextView = activity.findViewById(R.id.tv_score_x)
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        // First X win: top row.
+        cells[0][0].performClick() // X
+        cells[1][0].performClick() // O
+        cells[0][1].performClick() // X
+        cells[1][1].performClick() // O
+        cells[0][2].performClick() // X — wins
+
+        assertEquals("1", tvScoreX.text.toString())
+
+        // Clear board (keeps score) and play a second X win: middle row.
+        activity.findViewById<Button>(R.id.btn_new_game).performClick()
+
+        cells[1][0].performClick() // X
+        cells[2][0].performClick() // O
+        cells[1][1].performClick() // X
+        cells[2][1].performClick() // O
+        cells[1][2].performClick() // X — wins
+
+        assertEquals("2", tvScoreX.text.toString())
+    }
+
+    @Test
+    fun `draw increments draw counter`() {
+        val tvScoreDraws: TextView = activity.findViewById(R.id.tv_score_draws)
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        //   X | O | X
+        //   O | X | X
+        //   O | X | O
+        cells[0][0].performClick() // X
+        cells[0][1].performClick() // O
+        cells[0][2].performClick() // X
+        cells[1][0].performClick() // O
+        cells[1][1].performClick() // X
+        cells[2][0].performClick() // O
+        cells[1][2].performClick() // X
+        cells[2][2].performClick() // O
+        cells[2][1].performClick() // X — draw
+
+        assertEquals("1", tvScoreDraws.text.toString())
+    }
+
+    // ── Clear Board / Clear Score ────────────────────────────────────────────
+
+    @Test
+    fun `Clear Board resets board but keeps score`() {
+        val tvScoreX: TextView = activity.findViewById(R.id.tv_score_x)
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        // Win with X.
+        cells[0][0].performClick()
+        cells[1][0].performClick()
+        cells[0][1].performClick()
+        cells[1][1].performClick()
+        cells[0][2].performClick()
+
+        assertEquals("1", tvScoreX.text.toString())
+
+        // Clear Board.
+        activity.findViewById<Button>(R.id.btn_new_game).performClick()
+
+        // Board should be empty.
+        for (row in cells) for (btn in row) {
+            assertEquals("", btn.text.toString())
+        }
+        // Score should be preserved.
+        assertEquals("1", tvScoreX.text.toString())
+    }
+
+    @Test
+    fun `Clear Score resets score and board`() {
+        val tvScoreX: TextView = activity.findViewById(R.id.tv_score_x)
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        // Win with X.
+        cells[0][0].performClick()
+        cells[1][0].performClick()
+        cells[0][1].performClick()
+        cells[1][1].performClick()
+        cells[0][2].performClick()
+
+        assertEquals("1", tvScoreX.text.toString())
+
+        // Clear Score.
+        activity.findViewById<Button>(R.id.btn_new_round).performClick()
+
+        // Board should be empty.
+        for (row in cells) for (btn in row) {
+            assertEquals("", btn.text.toString())
+        }
+        // Score should be zero.
+        assertEquals("0", tvScoreX.text.toString())
+    }
+
+    // ── Occupied cell rejection ──────────────────────────────────────────────
+
+    @Test
+    fun `tapping occupied cell is ignored`() {
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        cells[0][0].performClick() // X places at (0,0)
+        cells[0][0].performClick() // tap again — should be ignored
+
+        assertEquals("X", cells[0][0].text.toString())
+        // If the tap were processed, currentPlayer would have advanced twice
+        // (back to X). The status should show O's turn, proving it was ignored.
+        val expected = activity.getString(R.string.status_turn, "O")
+        assertEquals(expected, tvStatus.text.toString())
+    }
+
+    // ── Auto-clear board timer ───────────────────────────────────────────────
+
+    @Test
+    fun `board auto-clears after win`() {
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        // X wins top row.
+        cells[0][0].performClick()
+        cells[1][0].performClick()
+        cells[0][1].performClick()
+        cells[1][1].performClick()
+        cells[0][2].performClick()
+
+        // Board still has marks right after the win.
+        assertEquals("X", cells[0][0].text.toString())
+
+        // Advance past AUTO_CLEAR_BOARD_DELAY_MS (3 000 ms) + win flash time.
+        shadowOf(android.os.Looper.getMainLooper()).idleFor(
+            java.time.Duration.ofMillis(5_200),
+        )
+
+        // Board should now be cleared.
+        for (row in cells) for (btn in row) {
+            assertEquals("", btn.text.toString())
+        }
+    }
+
+    // ── Content descriptions ─────────────────────────────────────────────────
+
+    @Test
+    fun `content descriptions update on cell play`() {
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        cells[0][0].performClick() // X at (0,0)
+
+        val expected = activity.getString(R.string.cell_desc_occupied, 1, 1, "X")
+        assertEquals(expected, cells[0][0].contentDescription.toString())
+    }
+
+    // ── Player labels ────────────────────────────────────────────────────────
+
+    @Test
+    fun `single-player labels show You and Android`() {
+        // Default mode is VS_CPU.
+        val tvLabelX: TextView = activity.findViewById(R.id.tv_label_x)
+        val tvLabelO: TextView = activity.findViewById(R.id.tv_label_o)
+
+        assertEquals(activity.getString(R.string.score_label_you), tvLabelX.text.toString())
+        assertEquals(activity.getString(R.string.score_label_android), tvLabelO.text.toString())
+    }
+
+    @Test
+    fun `two-player labels show X and O`() {
+        activity.findViewById<ToggleButton>(R.id.toggle_mode).isChecked = true
+
+        val tvLabelX: TextView = activity.findViewById(R.id.tv_label_x)
+        val tvLabelO: TextView = activity.findViewById(R.id.tv_label_o)
+
+        assertEquals(activity.getString(R.string.score_label_x), tvLabelX.text.toString())
+        assertEquals(activity.getString(R.string.score_label_o), tvLabelO.text.toString())
+    }
+
     // ── Driving restriction ─────────────────────────────────────────────────
 
     @Test
@@ -162,6 +341,24 @@ internal class GameActivityTest {
         assertFalse(
             "Mode toggle must be disabled when driving",
             activity.findViewById<ToggleButton>(R.id.toggle_mode).isEnabled,
+        )
+    }
+
+    @Test
+    fun `driving restriction keeps Clear Board and Clear Score enabled`() {
+        field("isDrivingRestricted").setBoolean(activity, true)
+
+        val updateMethod = GameActivity::class.java.getDeclaredMethod("updateBoardEnabled")
+        updateMethod.isAccessible = true
+        updateMethod.invoke(activity)
+
+        assertTrue(
+            "Clear Board must stay enabled when driving",
+            activity.findViewById<Button>(R.id.btn_new_game).isEnabled,
+        )
+        assertTrue(
+            "Clear Score must stay enabled when driving",
+            activity.findViewById<Button>(R.id.btn_new_round).isEnabled,
         )
     }
 }

@@ -11,23 +11,31 @@ part of the Laminar Flow Games open source collection.
 
 ## Features
 
-- Two-player local multiplayer
-- Enforces gameplay only when vehicle is in Park (`CarUxRestrictions` API)
-- Designed for the AAOS 1024p landscape display
+- **Two-player** local multiplayer
+- **AI opponent** — minimax algorithm with 1-second move delay
+- **1 Player / 2 Player mode toggle** — switch modes any time
+- **In-session scorekeeping** — tracks wins for each player and draws
+- **Auto-clear board** — board resets 3 seconds after a win or draw
+- **Win flash animation** — winning line flashes on victory
+- **Dark cockpit theme** — low-glare UI designed for automotive displays
+- **Park-only enforcement** — `CarUxRestrictions` API disables board cells and mode toggle while driving
 
 ## Roadmap
 
 - [x] Project setup
-- [ ] Two-player local game
-- [ ] AI opponent (minimax algorithm)
-- [ ] Scorekeeping
-- [ ] High score tracker
+- [x] Two-player local game
+- [x] AI opponent (minimax algorithm)
+- [x] In-session scorekeeping
+- [ ] Google Play Developer account signup
+- [ ] Internal testing on AAOS hardware (Cadillac Lyriq)
+- [ ] Closed testing (12 testers, 14 days)
+- [ ] Production release on Google Play
 
 ---
 
 ## Prerequisites
 
-- Android Studio (Otter or later)
+- Android Studio Otter 3 Feature Drop (2025.2.3) or later
 - Android SDK API 34
 - Android Automotive with Google APIs arm64-v8a system image (API 34-ext9)
 - JDK 17
@@ -73,8 +81,14 @@ This project enforces code quality on every commit via [Lefthook](https://github
 | Hook | Tool | What it checks |
 |---|---|---|
 | pre-commit | ktlint | Kotlin style and formatting |
-| pre-commit | detekt | Static analysis, code smells |
+| pre-commit | detekt | Static analysis, code smells, KDoc enforcement |
 | pre-push | Android Lint | AAOS API issues, manifest errors |
+
+### Unit Tests
+
+- Framework: [Robolectric](https://robolectric.org/) (JVM-based, no emulator required)
+- Coverage: JaCoCo with 80% minimum on the `game/` package
+- Run: `./gradlew testDebugUnitTest`
 
 To auto-fix formatting violations before committing:
 
@@ -96,6 +110,28 @@ app/src/main/
     ├── layout/                # XML layouts
     ├── values/                # Strings, colors, themes
     └── drawable/              # Icons and graphics
+
+docs/
+├── decisions/                 # Architecture Decision Records (ADRs)
+├── play-store-listing.md      # Store listing copy
+├── privacy-policy.md          # Privacy policy
+└── store-assets/              # Play Store graphic assets
+
+scripts/                       # Asset generation scripts (Python)
+```
+
+## Store Assets
+
+Play Store graphic assets live in `docs/store-assets/`. To regenerate them:
+
+> **Note:** The commands below assume macOS with Homebrew. On Linux, replace
+> `DYLD_LIBRARY_PATH` with `LD_LIBRARY_PATH` or omit it if cairo is installed system-wide.
+
+```bash
+pip install -r scripts/requirements.txt
+DYLD_LIBRARY_PATH=/opt/homebrew/lib python scripts/generate_icon.py
+DYLD_LIBRARY_PATH=/opt/homebrew/lib python scripts/generate_feature_graphic.py
+DYLD_LIBRARY_PATH=/opt/homebrew/lib python scripts/generate_phone_screenshots.py
 ```
 
 ---
