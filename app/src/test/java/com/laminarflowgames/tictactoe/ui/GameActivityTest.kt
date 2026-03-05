@@ -343,4 +343,22 @@ internal class GameActivityTest {
             activity.findViewById<ToggleButton>(R.id.toggle_mode).isEnabled,
         )
     }
+
+    @Test
+    fun `driving restriction keeps Clear Board and Clear Score enabled`() {
+        field("isDrivingRestricted").setBoolean(activity, true)
+
+        val updateMethod = GameActivity::class.java.getDeclaredMethod("updateBoardEnabled")
+        updateMethod.isAccessible = true
+        updateMethod.invoke(activity)
+
+        assertTrue(
+            "Clear Board must stay enabled when driving",
+            activity.findViewById<Button>(R.id.btn_new_game).isEnabled,
+        )
+        assertTrue(
+            "Clear Score must stay enabled when driving",
+            activity.findViewById<Button>(R.id.btn_new_round).isEnabled,
+        )
+    }
 }

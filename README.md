@@ -18,7 +18,7 @@ part of the Laminar Flow Games open source collection.
 - **Auto-clear board** — board resets 3 seconds after a win or draw
 - **Win flash animation** — winning line flashes on victory
 - **Dark cockpit theme** — low-glare UI designed for automotive displays
-- **Park-only enforcement** — `CarUxRestrictions` API disables the board while driving
+- **Park-only enforcement** — `CarUxRestrictions` API disables board cells and mode toggle while driving
 
 ## Roadmap
 
