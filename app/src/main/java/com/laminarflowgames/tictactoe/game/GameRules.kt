@@ -6,17 +6,17 @@ package com.laminarflowgames.tictactoe.game
  * All functions are pure: they read the board but never mutate it.
  */
 object GameRules {
-
-    private val WIN_LINES = listOf(
-        listOf(0 to 0, 0 to 1, 0 to 2), // row 0
-        listOf(1 to 0, 1 to 1, 1 to 2), // row 1
-        listOf(2 to 0, 2 to 1, 2 to 2), // row 2
-        listOf(0 to 0, 1 to 0, 2 to 0), // col 0
-        listOf(0 to 1, 1 to 1, 2 to 1), // col 1
-        listOf(0 to 2, 1 to 2, 2 to 2), // col 2
-        listOf(0 to 0, 1 to 1, 2 to 2), // main diagonal
-        listOf(0 to 2, 1 to 1, 2 to 0), // anti-diagonal
-    )
+    private val WIN_LINES =
+        listOf(
+            listOf(0 to 0, 0 to 1, 0 to 2), // row 0
+            listOf(1 to 0, 1 to 1, 1 to 2), // row 1
+            listOf(2 to 0, 2 to 1, 2 to 2), // row 2
+            listOf(0 to 0, 1 to 0, 2 to 0), // col 0
+            listOf(0 to 1, 1 to 1, 2 to 1), // col 1
+            listOf(0 to 2, 1 to 2, 2 to 2), // col 2
+            listOf(0 to 0, 1 to 1, 2 to 2), // main diagonal
+            listOf(0 to 2, 1 to 1, 2 to 0), // anti-diagonal
+        )
 
     /**
      * Returns the [Player] who has completed a line, or null if no winner exists yet.
@@ -68,6 +68,9 @@ object GameRules {
      * check whether the game is already over; callers are responsible for
      * gating moves on game state.
      */
-    fun isValidMove(board: GameBoard, row: Int, col: Int): Boolean =
-        board.cellAt(row, col) == null
+    fun isValidMove(
+        board: GameBoard,
+        row: Int,
+        col: Int,
+    ): Boolean = board.cellAt(row, col) == null
 }

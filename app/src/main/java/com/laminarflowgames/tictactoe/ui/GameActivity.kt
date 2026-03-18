@@ -43,12 +43,12 @@ import com.laminarflowgames.tictactoe.game.opponent
  * destroyed Activity.
  */
 class GameActivity : AppCompatActivity() {
-
     // ── Game state ────────────────────────────────────────────────────────────
 
     private val board = GameBoard()
     private var currentPlayer = Player.X
     private var gameOver = false
+
     @Volatile
     private var isCpuThinking = false
     private var gameMode = GameMode.VS_CPU
@@ -67,36 +67,38 @@ class GameActivity : AppCompatActivity() {
     // ── CPU scheduling ────────────────────────────────────────────────────────
 
     private val mainHandler = Handler(Looper.getMainLooper())
-    private val cpuMoveRunnable = Runnable {
-        if (gameOver || isDrivingRestricted) return@Runnable
-        isCpuThinking = false
-        val (row, col) = Minimax.bestMove(board, cpuPlayer)
-        onCellClicked(row, col)
-    }
+    private val cpuMoveRunnable =
+        Runnable {
+            if (gameOver || isDrivingRestricted) return@Runnable
+            isCpuThinking = false
+            val (row, col) = Minimax.bestMove(board, cpuPlayer)
+            onCellClicked(row, col)
+        }
     private val autoClearBoardRunnable = Runnable { clearBoard() }
 
     // ── Win flash ─────────────────────────────────────────────────────────────
 
     private var lastWinLine: List<Pair<Int, Int>>? = null
     private var winFlashStep = 0
-    private val winFlashRunnable = object : Runnable {
-        override fun run() {
-            val line = lastWinLine ?: return
-            // If a driving restriction fires mid-animation, abort the flash and
-            // restore the correct hard-locked state so no cell appears interactive.
-            if (isDrivingRestricted) {
-                highlightCells(line, false)
-                updateBoardEnabled()
-                return
-            }
-            // Even steps = highlight ON; odd steps = highlight OFF.
-            highlightCells(line, winFlashStep % 2 == 0)
-            winFlashStep++
-            if (winFlashStep < WIN_FLASH_COUNT * 2) {
-                mainHandler.postDelayed(this, WIN_FLASH_PERIOD_MS)
+    private val winFlashRunnable =
+        object : Runnable {
+            override fun run() {
+                val line = lastWinLine ?: return
+                // If a driving restriction fires mid-animation, abort the flash and
+                // restore the correct hard-locked state so no cell appears interactive.
+                if (isDrivingRestricted) {
+                    highlightCells(line, false)
+                    updateBoardEnabled()
+                    return
+                }
+                // Even steps = highlight ON; odd steps = highlight OFF.
+                highlightCells(line, winFlashStep % 2 == 0)
+                winFlashStep++
+                if (winFlashStep < WIN_FLASH_COUNT * 2) {
+                    mainHandler.postDelayed(this, WIN_FLASH_PERIOD_MS)
+                }
             }
         }
-    }
 
     // ── Views ─────────────────────────────────────────────────────────────────
 
@@ -116,35 +118,38 @@ class GameActivity : AppCompatActivity() {
 
     private var car: Car? = null
     private var uxRestrictionsManager: CarUxRestrictionsManager? = null
-    private val uxListener = CarUxRestrictionsManager.OnUxRestrictionsChangedListener { restrictions ->
-        isDrivingRestricted = restrictions.isRequiresDistractionOptimization
-        val restrictionLifted = lastDrivingRestricted && !isDrivingRestricted
-        val cpuTurnPending = gameMode == GameMode.VS_CPU &&
-            currentPlayer == cpuPlayer &&
-            isCpuThinking &&
-            !gameOver
-        if (restrictionLifted && cpuTurnPending) {
-            mainHandler.removeCallbacks(cpuMoveRunnable)
-            mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
-        }
-        lastDrivingRestricted = isDrivingRestricted
-        runOnUiThread { updateBoardEnabled() }
-    }
-    private val carLifecycleListener = Car.CarServiceLifecycleListener { connectedCar, ready ->
-        if (ready) {
-            uxRestrictionsManager =
-                connectedCar.getCarManager(Car.CAR_UX_RESTRICTION_SERVICE) as? CarUxRestrictionsManager
-            uxRestrictionsManager?.registerListener(uxListener)
-            uxRestrictionsManager?.currentCarUxRestrictions?.let { restrictions ->
-                isDrivingRestricted = restrictions.isRequiresDistractionOptimization
-                lastDrivingRestricted = isDrivingRestricted
-                updateBoardEnabled()
+    private val uxListener =
+        CarUxRestrictionsManager.OnUxRestrictionsChangedListener { restrictions ->
+            isDrivingRestricted = restrictions.isRequiresDistractionOptimization
+            val restrictionLifted = lastDrivingRestricted && !isDrivingRestricted
+            val cpuTurnPending =
+                gameMode == GameMode.VS_CPU &&
+                    currentPlayer == cpuPlayer &&
+                    isCpuThinking &&
+                    !gameOver
+            if (restrictionLifted && cpuTurnPending) {
+                mainHandler.removeCallbacks(cpuMoveRunnable)
+                mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
             }
-        } else {
-            uxRestrictionsManager?.unregisterListener()
-            uxRestrictionsManager = null
+            lastDrivingRestricted = isDrivingRestricted
+            runOnUiThread { updateBoardEnabled() }
         }
-    }
+    private val carLifecycleListener =
+        Car.CarServiceLifecycleListener { connectedCar, ready ->
+            if (ready) {
+                uxRestrictionsManager =
+                    connectedCar.getCarManager(Car.CAR_UX_RESTRICTION_SERVICE) as? CarUxRestrictionsManager
+                uxRestrictionsManager?.registerListener(uxListener)
+                uxRestrictionsManager?.currentCarUxRestrictions?.let { restrictions ->
+                    isDrivingRestricted = restrictions.isRequiresDistractionOptimization
+                    lastDrivingRestricted = isDrivingRestricted
+                    updateBoardEnabled()
+                }
+            } else {
+                uxRestrictionsManager?.unregisterListener()
+                uxRestrictionsManager = null
+            }
+        }
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -194,22 +199,27 @@ class GameActivity : AppCompatActivity() {
     // ── Board wiring ──────────────────────────────────────────────────────────
 
     private fun wireBoard() {
-        val ids = arrayOf(
-            arrayOf(R.id.btn_cell_00, R.id.btn_cell_01, R.id.btn_cell_02),
-            arrayOf(R.id.btn_cell_10, R.id.btn_cell_11, R.id.btn_cell_12),
-            arrayOf(R.id.btn_cell_20, R.id.btn_cell_21, R.id.btn_cell_22),
-        )
-        cells = Array(3) { row ->
-            Array(3) { col ->
-                findViewById<Button>(ids[row][col]).also { btn ->
-                    btn.setOnClickListener { onCellClicked(row, col) }
+        val ids =
+            arrayOf(
+                arrayOf(R.id.btn_cell_00, R.id.btn_cell_01, R.id.btn_cell_02),
+                arrayOf(R.id.btn_cell_10, R.id.btn_cell_11, R.id.btn_cell_12),
+                arrayOf(R.id.btn_cell_20, R.id.btn_cell_21, R.id.btn_cell_22),
+            )
+        cells =
+            Array(3) { row ->
+                Array(3) { col ->
+                    findViewById<Button>(ids[row][col]).also { btn ->
+                        btn.setOnClickListener { onCellClicked(row, col) }
+                    }
                 }
             }
-        }
     }
 
     @Suppress("CyclomaticComplexMethod")
-    private fun onCellClicked(row: Int, col: Int) {
+    private fun onCellClicked(
+        row: Int,
+        col: Int,
+    ) {
         if (gameOver || isDrivingRestricted || isCpuThinking) return
         if (!GameRules.isValidMove(board, row, col)) return
         board.makeMove(row, col, currentPlayer)
@@ -227,11 +237,12 @@ class GameActivity : AppCompatActivity() {
                 }
                 val isX = winner == Player.X
                 val winColor = getColor(if (isX) R.color.player_x else R.color.player_o)
-                val winText = if (gameMode == GameMode.VS_CPU) {
-                    getString(if (isX) R.string.status_you_win else R.string.status_android_wins)
-                } else {
-                    getString(R.string.status_winner, winner.name)
-                }
+                val winText =
+                    if (gameMode == GameMode.VS_CPU) {
+                        getString(if (isX) R.string.status_you_win else R.string.status_android_wins)
+                    } else {
+                        getString(R.string.status_winner, winner.name)
+                    }
                 finishRound(winText, winColor)
             }
             GameRules.isDraw(board) -> {
@@ -249,7 +260,10 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishRound(statusText: String, statusColor: Int) {
+    private fun finishRound(
+        statusText: String,
+        statusColor: Int,
+    ) {
         gameOver = true
         updateScore()
         tvStatus.text = statusText
@@ -267,7 +281,10 @@ class GameActivity : AppCompatActivity() {
         mainHandler.postDelayed(cpuMoveRunnable, CPU_MOVE_DELAY_MS)
     }
 
-    private fun updateCell(row: Int, col: Int) {
+    private fun updateCell(
+        row: Int,
+        col: Int,
+    ) {
         val btn = cells[row][col]
         val player = board.cellAt(row, col)
         btn.text = player?.name ?: ""
@@ -280,11 +297,12 @@ class GameActivity : AppCompatActivity() {
                 },
             ),
         )
-        btn.contentDescription = if (player == null) {
-            getString(R.string.cell_desc_empty, row + 1, col + 1)
-        } else {
-            getString(R.string.cell_desc_occupied, row + 1, col + 1, player.name)
-        }
+        btn.contentDescription =
+            if (player == null) {
+                getString(R.string.cell_desc_empty, row + 1, col + 1)
+            } else {
+                getString(R.string.cell_desc_occupied, row + 1, col + 1, player.name)
+            }
     }
 
     private fun updateBoardEnabled() {
@@ -337,15 +355,20 @@ class GameActivity : AppCompatActivity() {
         board.reset()
         currentPlayer = Player.X
         gameOver = false
-        for (row in 0..2) for (col in 0..2) {
-            updateCell(row, col)
-            cells[row][col].setBackgroundResource(R.drawable.bg_cell)
+        for (row in 0..2) {
+            for (col in 0..2) {
+                updateCell(row, col)
+                cells[row][col].setBackgroundResource(R.drawable.bg_cell)
+            }
         }
         updateBoardEnabled()
         updateStatus()
     }
 
-    private fun highlightCells(line: List<Pair<Int, Int>>, highlight: Boolean) {
+    private fun highlightCells(
+        line: List<Pair<Int, Int>>,
+        highlight: Boolean,
+    ) {
         val drawableRes = if (highlight) R.drawable.bg_cell_win else R.drawable.bg_cell
         line.forEach { (row, col) ->
             val btn = cells[row][col]
@@ -380,12 +403,13 @@ class GameActivity : AppCompatActivity() {
     @Suppress("TooGenericExceptionCaught", "SwallowedException")
     private fun initCarUxRestrictions() {
         try {
-            car = Car.createCar(
-                this,
-                mainHandler,
-                Car.CAR_WAIT_TIMEOUT_DO_NOT_WAIT,
-                carLifecycleListener,
-            )
+            car =
+                Car.createCar(
+                    this,
+                    mainHandler,
+                    Car.CAR_WAIT_TIMEOUT_DO_NOT_WAIT,
+                    carLifecycleListener,
+                )
         } catch (e: Exception) {
             // Non-automotive environments (e.g. standard Android or JVM tests) do not
             // provide the Car service. Fail gracefully: leave isDrivingRestricted = false

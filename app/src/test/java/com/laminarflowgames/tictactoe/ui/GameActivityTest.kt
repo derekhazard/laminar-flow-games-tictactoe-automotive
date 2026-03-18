@@ -25,13 +25,11 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 internal class GameActivityTest {
-
     private lateinit var activity: GameActivity
     private lateinit var cells: Array<Array<Button>>
     private lateinit var tvStatus: TextView
 
-    private fun field(name: String) =
-        GameActivity::class.java.getDeclaredField(name).also { it.isAccessible = true }
+    private fun field(name: String) = GameActivity::class.java.getDeclaredField(name).also { it.isAccessible = true }
 
     @Before
     fun setUp() {
@@ -107,9 +105,10 @@ internal class GameActivityTest {
 
         // CPU should have placed its move (O appears on the board).
         assertFalse(field("isCpuThinking").getBoolean(activity))
-        val oCount = (0..2).sumOf { r ->
-            (0..2).count { c -> cells[r][c].text.toString() == "O" }
-        }
+        val oCount =
+            (0..2).sumOf { r ->
+                (0..2).count { c -> cells[r][c].text.toString() == "O" }
+            }
         assertEquals("CPU should have placed exactly one O", 1, oCount)
     }
 
@@ -212,8 +211,10 @@ internal class GameActivityTest {
         activity.findViewById<Button>(R.id.btn_new_game).performClick()
 
         // Board should be empty.
-        for (row in cells) for (btn in row) {
-            assertEquals("", btn.text.toString())
+        for (row in cells) {
+            for (btn in row) {
+                assertEquals("", btn.text.toString())
+            }
         }
         // Score should be preserved.
         assertEquals("1", tvScoreX.text.toString())
@@ -237,8 +238,10 @@ internal class GameActivityTest {
         activity.findViewById<Button>(R.id.btn_new_round).performClick()
 
         // Board should be empty.
-        for (row in cells) for (btn in row) {
-            assertEquals("", btn.text.toString())
+        for (row in cells) {
+            for (btn in row) {
+                assertEquals("", btn.text.toString())
+            }
         }
         // Score should be zero.
         assertEquals("0", tvScoreX.text.toString())
@@ -282,8 +285,10 @@ internal class GameActivityTest {
         )
 
         // Board should now be cleared.
-        for (row in cells) for (btn in row) {
-            assertEquals("", btn.text.toString())
+        for (row in cells) {
+            for (btn in row) {
+                assertEquals("", btn.text.toString())
+            }
         }
     }
 

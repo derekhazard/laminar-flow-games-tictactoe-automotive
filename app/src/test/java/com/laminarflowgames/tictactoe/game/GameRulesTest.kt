@@ -2,14 +2,13 @@ package com.laminarflowgames.tictactoe.game
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
 internal class GameRulesTest {
-
     private lateinit var board: GameBoard
 
     @Before
@@ -192,63 +191,87 @@ internal class GameRulesTest {
 
     @Test
     fun `winningLine returns null on draw board`() {
-        board.makeMove(0, 0, Player.X); board.makeMove(0, 1, Player.O); board.makeMove(0, 2, Player.X)
-        board.makeMove(1, 0, Player.X); board.makeMove(1, 1, Player.X); board.makeMove(1, 2, Player.O)
-        board.makeMove(2, 0, Player.O); board.makeMove(2, 1, Player.X); board.makeMove(2, 2, Player.O)
+        board.makeMove(0, 0, Player.X)
+        board.makeMove(0, 1, Player.O)
+        board.makeMove(0, 2, Player.X)
+        board.makeMove(1, 0, Player.X)
+        board.makeMove(1, 1, Player.X)
+        board.makeMove(1, 2, Player.O)
+        board.makeMove(2, 0, Player.O)
+        board.makeMove(2, 1, Player.X)
+        board.makeMove(2, 2, Player.O)
         assertNull(GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns row 0 cells`() {
-        board.makeMove(0, 0, Player.X); board.makeMove(0, 1, Player.X); board.makeMove(0, 2, Player.X)
+        board.makeMove(0, 0, Player.X)
+        board.makeMove(0, 1, Player.X)
+        board.makeMove(0, 2, Player.X)
         assertEquals(listOf(0 to 0, 0 to 1, 0 to 2), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns row 1 cells`() {
-        board.makeMove(1, 0, Player.O); board.makeMove(1, 1, Player.O); board.makeMove(1, 2, Player.O)
+        board.makeMove(1, 0, Player.O)
+        board.makeMove(1, 1, Player.O)
+        board.makeMove(1, 2, Player.O)
         assertEquals(listOf(1 to 0, 1 to 1, 1 to 2), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns row 2 cells`() {
-        board.makeMove(2, 0, Player.X); board.makeMove(2, 1, Player.X); board.makeMove(2, 2, Player.X)
+        board.makeMove(2, 0, Player.X)
+        board.makeMove(2, 1, Player.X)
+        board.makeMove(2, 2, Player.X)
         assertEquals(listOf(2 to 0, 2 to 1, 2 to 2), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns col 0 cells`() {
-        board.makeMove(0, 0, Player.X); board.makeMove(1, 0, Player.X); board.makeMove(2, 0, Player.X)
+        board.makeMove(0, 0, Player.X)
+        board.makeMove(1, 0, Player.X)
+        board.makeMove(2, 0, Player.X)
         assertEquals(listOf(0 to 0, 1 to 0, 2 to 0), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns col 1 cells`() {
-        board.makeMove(0, 1, Player.O); board.makeMove(1, 1, Player.O); board.makeMove(2, 1, Player.O)
+        board.makeMove(0, 1, Player.O)
+        board.makeMove(1, 1, Player.O)
+        board.makeMove(2, 1, Player.O)
         assertEquals(listOf(0 to 1, 1 to 1, 2 to 1), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns col 2 cells`() {
-        board.makeMove(0, 2, Player.X); board.makeMove(1, 2, Player.X); board.makeMove(2, 2, Player.X)
+        board.makeMove(0, 2, Player.X)
+        board.makeMove(1, 2, Player.X)
+        board.makeMove(2, 2, Player.X)
         assertEquals(listOf(0 to 2, 1 to 2, 2 to 2), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns main diagonal cells`() {
-        board.makeMove(0, 0, Player.O); board.makeMove(1, 1, Player.O); board.makeMove(2, 2, Player.O)
+        board.makeMove(0, 0, Player.O)
+        board.makeMove(1, 1, Player.O)
+        board.makeMove(2, 2, Player.O)
         assertEquals(listOf(0 to 0, 1 to 1, 2 to 2), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine returns anti-diagonal cells`() {
-        board.makeMove(0, 2, Player.X); board.makeMove(1, 1, Player.X); board.makeMove(2, 0, Player.X)
+        board.makeMove(0, 2, Player.X)
+        board.makeMove(1, 1, Player.X)
+        board.makeMove(2, 0, Player.X)
         assertEquals(listOf(0 to 2, 1 to 1, 2 to 0), GameRules.winningLine(board))
     }
 
     @Test
     fun `winningLine contains exactly 3 cells for any win`() {
-        board.makeMove(0, 0, Player.X); board.makeMove(0, 1, Player.X); board.makeMove(0, 2, Player.X)
+        board.makeMove(0, 0, Player.X)
+        board.makeMove(0, 1, Player.X)
+        board.makeMove(0, 2, Player.X)
         assertNotNull(GameRules.winningLine(board))
         assertEquals(3, GameRules.winningLine(board)!!.size)
     }

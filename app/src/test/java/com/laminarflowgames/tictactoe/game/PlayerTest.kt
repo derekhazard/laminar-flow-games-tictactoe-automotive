@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 internal class PlayerTest {
-
     @Test
     fun `X opponent is O`() {
         assertEquals(Player.O, Player.X.opponent())
