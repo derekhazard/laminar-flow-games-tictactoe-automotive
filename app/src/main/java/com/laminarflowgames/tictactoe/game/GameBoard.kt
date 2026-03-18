@@ -8,10 +8,12 @@ package com.laminarflowgames.tictactoe.game
  * it can be unit-tested on the JVM without an emulator.
  */
 class GameBoard {
-
     private val cells = arrayOfNulls<Player>(9)
 
-    private fun requireValidCoords(row: Int, col: Int) {
+    private fun requireValidCoords(
+        row: Int,
+        col: Int,
+    ) {
         require(row in 0..2 && col in 0..2) { "row and col must be in 0..2, got ($row, $col)" }
     }
 
@@ -20,7 +22,10 @@ class GameBoard {
      *
      * @throws IllegalArgumentException if [row] or [col] is outside 0..2.
      */
-    fun cellAt(row: Int, col: Int): Player? {
+    fun cellAt(
+        row: Int,
+        col: Int,
+    ): Player? {
         requireValidCoords(row, col)
         return cells[row * 3 + col]
     }
@@ -31,7 +36,11 @@ class GameBoard {
      * @return true if the move was accepted; false if the cell is already occupied.
      * @throws IllegalArgumentException if [row] or [col] is outside 0..2.
      */
-    fun makeMove(row: Int, col: Int, player: Player): Boolean {
+    fun makeMove(
+        row: Int,
+        col: Int,
+        player: Player,
+    ): Boolean {
         requireValidCoords(row, col)
         if (cells[row * 3 + col] != null) return false
         cells[row * 3 + col] = player
@@ -45,7 +54,10 @@ class GameBoard {
     fun reset() = cells.fill(null)
 
     /** Clears [row]/[col] back to empty. For use by [Minimax] backtracking only. */
-    internal fun clearCell(row: Int, col: Int) {
+    internal fun clearCell(
+        row: Int,
+        col: Int,
+    ) {
         requireValidCoords(row, col)
         cells[row * 3 + col] = null
     }

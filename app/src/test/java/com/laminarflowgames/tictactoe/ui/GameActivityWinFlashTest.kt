@@ -19,13 +19,11 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34])
 internal class GameActivityWinFlashTest {
-
     /**
      * Returns a reflected, accessible [java.lang.reflect.Field] from [GameActivity]
      * by name.
      */
-    private fun field(name: String) =
-        GameActivity::class.java.getDeclaredField(name).also { it.isAccessible = true }
+    private fun field(name: String) = GameActivity::class.java.getDeclaredField(name).also { it.isAccessible = true }
 
     @Test
     fun `win flash aborts and disables all cells when driving restriction fires mid-animation`() {

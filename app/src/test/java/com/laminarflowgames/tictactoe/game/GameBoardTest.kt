@@ -8,7 +8,6 @@ import org.junit.Before
 import org.junit.Test
 
 internal class GameBoardTest {
-
     private lateinit var board: GameBoard
 
     @Before

@@ -14,14 +14,16 @@ private const val SCORE_WIN = 10
  * copying the board, avoiding allocations on the small 3×3 tree.
  */
 object Minimax {
-
     /**
      * Returns the (row, col) of the best move for [cpuPlayer] on the current [board].
      *
      * Must only be called when the board has at least one empty cell and no winner
      * has been declared.
      */
-    fun bestMove(board: GameBoard, cpuPlayer: Player): Pair<Int, Int> {
+    fun bestMove(
+        board: GameBoard,
+        cpuPlayer: Player,
+    ): Pair<Int, Int> {
         require(!board.isFull()) { "bestMove requires at least one empty cell" }
         require(GameRules.checkWinner(board) == null) { "bestMove called after a winner was declared" }
         var bestScore = Int.MIN_VALUE
@@ -45,14 +47,20 @@ object Minimax {
         return bestRow to bestCol
     }
 
-    private fun evaluate(board: GameBoard, cpuPlayer: Player, isMaximizing: Boolean, depth: Int): Int {
+    private fun evaluate(
+        board: GameBoard,
+        cpuPlayer: Player,
+        isMaximizing: Boolean,
+        depth: Int,
+    ): Int {
         val winner = GameRules.checkWinner(board)
-        val terminal = when {
-            winner == cpuPlayer -> SCORE_WIN - depth
-            winner == cpuPlayer.opponent() -> depth - SCORE_WIN
-            board.isFull() -> 0
-            else -> null
-        }
+        val terminal =
+            when {
+                winner == cpuPlayer -> SCORE_WIN - depth
+                winner == cpuPlayer.opponent() -> depth - SCORE_WIN
+                board.isFull() -> 0
+                else -> null
+            }
         if (terminal != null) return terminal
 
         val mover = if (isMaximizing) cpuPlayer else cpuPlayer.opponent()

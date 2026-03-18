@@ -7,7 +7,6 @@ import org.junit.Before
 import org.junit.Test
 
 internal class MinimaxTest {
-
     private lateinit var board: GameBoard
 
     @Before
@@ -132,9 +131,14 @@ internal class MinimaxTest {
         // X O X
         // O X O
         // O X _
-        board.makeMove(0, 0, Player.X); board.makeMove(0, 1, Player.O); board.makeMove(0, 2, Player.X)
-        board.makeMove(1, 0, Player.O); board.makeMove(1, 1, Player.X); board.makeMove(1, 2, Player.O)
-        board.makeMove(2, 0, Player.O); board.makeMove(2, 1, Player.X)
+        board.makeMove(0, 0, Player.X)
+        board.makeMove(0, 1, Player.O)
+        board.makeMove(0, 2, Player.X)
+        board.makeMove(1, 0, Player.O)
+        board.makeMove(1, 1, Player.X)
+        board.makeMove(1, 2, Player.O)
+        board.makeMove(2, 0, Player.O)
+        board.makeMove(2, 1, Player.X)
         val (row, col) = Minimax.bestMove(board, Player.O)
         assertEquals(2, row)
         assertEquals(2, col)
