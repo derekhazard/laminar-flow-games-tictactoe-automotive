@@ -26,8 +26,8 @@ part of the Laminar Flow Games open source collection.
 - [x] Two-player local game
 - [x] AI opponent (minimax algorithm)
 - [x] In-session scorekeeping
-- [ ] Google Play Developer account signup
-- [ ] Internal testing on AAOS hardware (Cadillac Lyriq)
+- [x] Google Play Developer account signup
+- [x] Internal testing on AAOS hardware (Cadillac Lyriq)
 - [ ] Closed testing (12 testers, 14 days)
 - [ ] Production release on Google Play
 
